@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $("#kt_role_id").select2({
+        placeholder: "Select Role",
+        allowClear: true
+    });
+});
+
 let selectedForm = $("#submitForm");
 // Get the current URL of the window
 const BASE_URL = window.location.origin+"/users";
@@ -18,14 +25,20 @@ $(".formReset").on("click", function () {
 function formReset() {
     $("#submitForm").trigger("reset");
     $("#kt_role_id").val('').change();
-    $("#kt_department_id").val('').change();
-    $("#kt_active").val('').change();
+    $("#kt_active").val('YES').change();
 }
+
+$("#openUserModal").on("click", function () {
+    openModal();
+});
 
 function openModal() {
     formReset();
     loader(selectedForm, false);
     $("#kt_user_id").val(null);
+    $("#showModal").modal("show");
+    $(".modal-title").text("Add New User");
+    $(".btnSubmit").text("Add");
 }
 
 selectedForm.submit(function (event) {
@@ -80,12 +93,12 @@ let table = $('#kt_table_users').DataTable({
             searchable: false,
         },
         {
-            data: "pin_number",
-            name: "pin_number",
+            data: "user_name",
+            name: "user_name",
         },
         {
-            data: "name",
-            name: "name",
+            data: "full_name",
+            name: "full_name",
         },
         {
             data: "email",
@@ -94,11 +107,6 @@ let table = $('#kt_table_users').DataTable({
         {
             data: "phone",
             name: "phone",
-        },
-        {
-            data: "department_name",
-            name: "department_name",
-            orderable: false,
         },
         {
             data: "role_name",
@@ -134,7 +142,14 @@ function editUserInfo(userId){
             if (response?.success && response?.statusCode === 200 && data) {
                 $("#kt_user_id").val(data.id);
                 $("#kt_role_id").val(data.role_id).change();
-                $("#kt_department_id").val(data.department_id).change();
+                $("#kt_full_name").val(data.full_name);
+                $("#kt_email").val(data.email);
+                $("#kt_phone").val(data.phone);
+                $("#kt_user_name").val(data.user_name);
+                $("#kt_address").val(data.address);
+                $("#kt_country").val(data.country);
+                $("#kt_nid").val(data.nid);
+                $("#kt_diamond_per_usd").val(data.diamond_per_usd);
                 $("#kt_active").val(data.active).change();
             }
         },

@@ -21,8 +21,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['role_id', 'employee_id','department_id', 'name', 'email', 'pin_number', 'phone', 'password', 'active'];
-
+    protected $fillable = ['full_name', 'user_name', 'role_id', 'address', 'country', 'email', 'phone', 'nid', 'nid_front', 'nid_back', 'passport', 'passport_img', 'active', 'diamond_per_usd', 'password', 'imo_id', 'profile_img'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -30,7 +29,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -41,7 +39,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -51,18 +48,8 @@ class User extends Authenticatable
         return $this->belongsTo(UserRole::class, 'role_id');
     }
 
-    public function employee(): BelongsTo
-    {
-        return $this->belongsTo(Employee::class,'employee_id');
-    }
-
-    public function department():belongsTo
-    {
-        return $this->belongsTo(EmployeeDepartment::class,'department_id');
-    }
-
     public function hasPermission($permission): bool
     {
-        return $this->role->permissions()->where('slug',$permission)->first() ? true : false;
+        return $this->role->permissions()->where('slug', $permission)->first() ? true : false;
     }
 }

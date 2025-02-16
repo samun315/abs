@@ -9,29 +9,34 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class UserService
 {
+
+    public function storeUserInfo(array $data): User|JsonResponse
+    {
+            $data['password'] =  Hash::make($data['password']);
+
+            return User::query()->create($data);
+    }
+
     public function getUserList(Request $request): JsonResponse
     {
         $searchKeyword = $request->input('search');
 
         $query = User::query()->leftJoin('user_roles', function ($join) {
             $join->on('users.role_id', '=', 'user_roles.role_id');
-        })->leftJoin('employee_departments', function ($join) {
-            $join->on('users.department_id', '=', 'employee_departments.department_id');
         })->where(function ($query) use ($searchKeyword) {
             $query->where(function ($q) use ($searchKeyword) {
-                $q->where('pin_number', 'ilike', "%$searchKeyword%")
-                    ->orWhere('name', 'ilike', "%$searchKeyword%")
-                    ->orWhere('email', 'ilike', "%$searchKeyword%")
-                    ->orWhere('phone', 'ilike', "%$searchKeyword%")
-                    ->orWhere('user_roles.role_name', 'ilike', "%$searchKeyword%")
-                    ->orWhere('employee_departments.department_name', 'ilike', "%$searchKeyword%");
+                $q->where('full_name', 'like', "%$searchKeyword%")
+                    ->orWhere('email', 'like', "%$searchKeyword%")
+                    ->orWhere('phone', 'like', "%$searchKeyword%")
+                    ->orWhere('user_roles.role_name', 'like', "%$searchKeyword%");
             });
         })
-            ->select('users.*', 'user_roles.role_name', 'employee_departments.department_name');
+            ->select('users.*', 'user_roles.role_name');
 
         return Datatables::of($query)
             ->addIndexColumn()

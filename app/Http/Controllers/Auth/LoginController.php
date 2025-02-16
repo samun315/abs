@@ -23,9 +23,9 @@ class LoginController extends Controller
     {
         try {
 
-            $user = User::query()->where('pin_number', $loginRequest->input('pin_number'))
+            $user = User::query()->where('email', $loginRequest->input('email'))
                 // ->where('active', ActiveStatus::YES)
-                ->first(['id', 'employee_id', 'name', 'email', 'pin_number', 'role_id', 'department_id', 'phone', 'active', 'password']);
+                ->first(['id',  'full_name', 'email', 'role_id', 'phone', 'password']);
 
             if (!empty($user)) {
 
@@ -35,15 +35,10 @@ class LoginController extends Controller
 
                     $authenticateUserInfo = [
                         "id" => $user->id,
-                        "employee_id" => $user->employee_id,
-                        "name" => $user->name,
+                        "full_name" => $user->full_name,
                         "email" => $user->email,
-                        "pin_number" => $user->pin_number,
                         "role_id" => $user->role_id,
-                        "department_id" => $user->department_id,
-                        "is_department_head" => 1,
                         "phone" => $user->phone,
-                        "active" => $user->active,
                     ];
 
                     // if (!empty($user->employee)) {

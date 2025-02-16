@@ -105,10 +105,10 @@
                             <!--begin::Input group--->
                             <div class="fv-row mb-8">
                                 <!--begin::User PIN-->
-                                <input type="text" placeholder="Enter PIN" name="pin_number" autocomplete="off"
-                                    class="form-control bg-transparent @error('pin_number') is-invalid @enderror"
-                                    value="{{ old('pin_number') }}" />
-                                @error('pin_number')
+                                <input type="email" placeholder="Enter Username/Email" name="email" autocomplete="off"
+                                    class="form-control bg-transparent @error('email') is-invalid @enderror"
+                                    value="{{ old('email') }}" />
+                                @error('email')
                                     <span class="text-danger mt-2">{{ $message }}</span>
                                 @enderror
                                 <!--end::User PIN-->

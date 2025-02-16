@@ -47,22 +47,6 @@
                                     </div>
 
                                     <div class="col-md-6 fv-row mb-5">
-                                        <label class="required fs-5 fw-bold mb-2">User Department</label>
-                                        <select name="department_id" id="kt_department_id" data-control="select2"
-                                            data-placeholder="Select User Department" data-dropdown-parent="#showModal"
-                                            class="form-select form-select-solid @error('department_id') is-invalid @enderror">
-                                            <option value=""></option>
-                                            @foreach ($userDepartments as $userDepartment)
-                                                <option value="{{ $userDepartment->department_id ?? old('department_id') }}">
-                                                    {{ $userDepartment->department_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('department_id')
-                                            <span class="text-danger mt-2">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6 fv-row mb-5">
                                         <label class="required fs-5 fw-bold mb-2">Active</label>
                                         <select name="active" id="kt_active"
                                             data-placeholder="Select active Status"

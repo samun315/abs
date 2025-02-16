@@ -1,6 +1,14 @@
 @extends('master')
+@section('title', 'User List')
 
 @section('content')
+<x-toolbar-component title="User List" :breadcrumbs="[
+        ['label' => 'Home', 'url' => route('dashboard')],
+        ['label' => 'User Management', 'url' => 'javascript:void(0)'],
+        ['label' => 'Access Control', 'url' => 'javascript:void(0)'],
+        ['label' => 'User List', 'active' => true],
+    ]" modalTarget="openUserModal" actionIcon="fas fa-plus-circle"
+        actionLabel="Add New" />
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-fluid">
@@ -42,11 +50,10 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-muted text-uppercase fw-bolder fs-7 gs-0">
                                         <th>#</th>
-                                        <th>PIN No</th>
+                                        <th>Username</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone Number</th>
-                                        <th>Department</th>
                                         <th>Role</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -61,8 +68,10 @@
                 <!--end::Card body-->
             </div>
             <!--end::Card-->
+            {{-- begin:: User modal --}}
+            @include('user.modal.addUserModal')
+            {{-- end:: User modal --}}
 
-            @include('user.modal.editUserModal')
         </div>
         <!--end::Container-->
     </div>

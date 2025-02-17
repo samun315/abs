@@ -31,6 +31,7 @@ class UserService
         })->where(function ($query) use ($searchKeyword) {
             $query->where(function ($q) use ($searchKeyword) {
                 $q->where('full_name', 'like', "%$searchKeyword%")
+                    ->orWhere('user_name', 'like', "%$searchKeyword%")
                     ->orWhere('email', 'like', "%$searchKeyword%")
                     ->orWhere('phone', 'like', "%$searchKeyword%")
                     ->orWhere('user_roles.role_name', 'like', "%$searchKeyword%");

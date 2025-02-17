@@ -1,14 +1,7 @@
-$(document).ready(function () {
-    $("#kt_role_id").select2({
-        placeholder: "Select Role",
-        allowClear: true,
-    });
-});
-
 let selectedForm = $("#submitForm");
-let selectedPasswordForm = $("#passwordChangeForm");
+
 // Get the current URL of the window
-const BASE_URL = window.location.origin + "/users";
+const BASE_URL = window.location.origin + "/marchant/request";
 
 let search = $("#search");
 
@@ -19,39 +12,23 @@ let validate = selectedForm.validate({
     onsubmit: true,
 });
 
-let validatePassword = selectedPasswordForm.validate({
-    rules: {
-        name: "required",
-    },
-    onsubmit: true,
-});
-
-$(".password").show();
-
 $(".formReset").on("click", function () {
     formReset();
 });
 
 function formReset() {
     $("#submitForm").trigger("reset");
-    $("#passwordChangeForm").trigger("reset");
-    $("#kt_role_id").val("").change();
-    $("#kt_active").val("YES").change();
 }
 
-$("#openUserModal").on("click", function () {
+$("#openWhitelistModal").on("click", function () {
     openModal();
 });
 
 function openModal() {
     formReset();
     loader(selectedForm, false);
-    $("#kt_user_id").val(null);
+    $("#kt_whitelist_request_id").val(null);
     $("#showModal").modal("show");
-    $(".modal-title").text("Add New User");
-    $(".btnSubmit").text("Add");
-    $(".password").show();
-    $("#togglePasswordBtn").hide();
 }
 
 selectedForm.submit(function (event) {
@@ -68,13 +45,13 @@ selectedForm.submit(function (event) {
 
     $(".error").remove();
 
-    let userId = $("#kt_user_id").val();
+    let whitelistId = $("#kt_whitelist_request_id").val();
     let url = "";
-    if (userId) {
-        url = BASE_URL + "/update/" + userId;
+    if (whitelistId) {
+        url = BASE_URL + "/whitelist/update/" + whitelistId;
         formData.append("_method", "PUT");
     } else {
-        url = BASE_URL + "/store";
+        url = BASE_URL + "/whitelist/store";
     }
 
     $.ajax({
@@ -89,11 +66,44 @@ selectedForm.submit(function (event) {
     });
 });
 
-let table = $("#kt_table_users").DataTable({
+const formatDate = (data) => {
+    if (!data) return "";
+
+    const date = new Date(data);
+    // Month and day as textual representations
+    let monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ];
+
+    let month = monthNames[date.getMonth()];
+    let day = date.getDate().toString().padStart(2, "0");
+    let hour = date.getHours().toString().padStart(2, "0");
+
+    let amPm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12; // Convert 0 to 12 for 12 AM
+
+    let minute = date.getMinutes().toString().padStart(2, "0");
+    let second = date.getSeconds().toString().padStart(2, "0");
+
+    return `${day} ${month}, ${date.getFullYear()} ,${hour}:${minute} ${amPm}`;
+};
+
+let table = $("#kt_table_whitelist").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: BASE_URL + "/index",
+        url: BASE_URL + "/whitelist",
         data: function (d) {
             d.search = search.val();
         },
@@ -106,28 +116,67 @@ let table = $("#kt_table_users").DataTable({
             searchable: false,
         },
         {
-            data: "user_name",
-            name: "user_name",
+            data: "mobile_number",
+            name: "mobile_number",
         },
         {
-            data: "full_name",
-            name: "full_name",
+            data: "status",
+            render: function (data) {
+                if (!data) return "";
+
+                let status = "";
+
+                if (data == "Pending") {
+                    status = "badge badge-warning";
+                } else if (data == "Active") {
+                    status = "badge badge-success";
+                } else {
+                    status = "badge badge-danger";
+                }
+
+                return `<p class="${status} ">${data}</p>`;
+            },
         },
         {
-            data: "email",
-            name: "email",
+            data: "created_at",
+            render: formatDate,
+        },
+    ],
+    columnDefs: [
+        {
+            targets: "_all",
+            defaultContent: "",
+        },
+    ],
+    paging: true, // Enables pagination
+    pageLength: 10, // Show 5 records per page
+    lengthMenu: [10, 25, 50, 75, 100, 200], // Dropdown for selecting number of rows
+    dom:
+        '<"row"<"col-sm-2"l><"col-sm-10 d-flex justify-content-end"B>>' + // Length menu & buttons
+        '<"row"<"col-sm-12"tr>>' + // Table rows
+        '<"row mt-2"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"p>>', // Pagination & info
+    buttons: [
+        {
+            extend: "excelHtml5",
+            text: "Excel",
+            className: "btn btn-success btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child)", // Exclude the first column (DT_RowIndex)
+            },
         },
         {
-            data: "phone",
-            name: "phone",
-        },
-        {
-            data: "role_name",
-            name: "role_name",
-        },
-        {
-            data: "action",
-            name: "action",
+            extend: "pdfHtml5",
+            text: "PDF",
+            className: "btn btn-danger btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child)", // Exclude the first column (DT_RowIndex)
+            },
         },
     ],
 });
@@ -140,7 +189,6 @@ $(document).on("click", ".edit-user, .view-user", function () {
     var user_id = $(this).attr("data-id");
     editUserInfo(user_id);
 });
-
 
 function editUserInfo(userId) {
     loader(selectedForm, true);
@@ -173,7 +221,6 @@ function editUserInfo(userId) {
         },
     });
 }
-
 
 $(document).on("click", ".changePasswordBtn", function () {
     var id = $(this).attr("data-id");
@@ -211,7 +258,7 @@ selectedPasswordForm.submit(function (event) {
         processData: false,
         success: function (response) {
             if (response?.statusCode === 200 || response?.statusCode === 201) {
-                $("#kt_modal_change_password").modal('hide');
+                $("#kt_modal_change_password").modal("hide");
                 toastr.success(response?.message);
                 table.draw();
             }
@@ -242,11 +289,10 @@ $(".passwordIcon").addClass("fas fa-eye");
 // Apply function to each button and field
 togglePasswordVisibility(".togglePasswordBtn", ".kt_password", ".passwordIcon");
 
-$(".kt_password").on("keyup",function(){
+$(".kt_password").on("keyup", function () {
     if ($(this).val() == "") {
         $(".togglePasswordBtn").hide();
     } else {
         $(".togglePasswordBtn").show();
     }
 });
-

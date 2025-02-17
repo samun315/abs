@@ -34,6 +34,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/menu/menu.php'));
             //End Menu Menu-item Route
 
+                      //Start Request whitelist Route
+                      Route::middleware(['web', 'preventBackHistory', 'user'])
+                      ->prefix('marchant')
+                      ->name('marchant.request.')
+                      ->group(base_path('routes/marchant/whitelist.php'));
+                  //End Request whitelist Route
+
             //****Start Api Route******//
             Route::middleware(['api'])
                 ->prefix('api')

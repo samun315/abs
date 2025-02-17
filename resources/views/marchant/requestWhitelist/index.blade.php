@@ -1,34 +1,12 @@
 @extends('master')
-@section('title', 'User List')
-<style nonce="{{ $cspNonce }}">
-    .passwordDiv {
-        position: relative;
-    }
-
-    #error-message {
-        color: red;
-        font-size: 14px;
-        display: none;
-    }
-
-    .togglePasswordBtn {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-    }
-</style>
+@section('title', 'Request WhiteList')
 @section('content')
-    <x-toolbar-component title="User List" :breadcrumbs="[
+    <x-toolbar-component title="Requests WhiteList" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
-        ['label' => 'User Management', 'url' => 'javascript:void(0)'],
-        ['label' => 'Access Control', 'url' => 'javascript:void(0)'],
-        ['label' => 'User List', 'active' => true],
-    ]" modalTarget="openUserModal" actionIcon="fas fa-plus-circle"
-        actionLabel="Add New" />
+        ['label' => 'Order Management', 'url' => 'javascript:void(0)'],
+        ['label' => 'Requests WhiteList', 'active' => true],
+    ]" modalTarget="openWhitelistModal"
+        actionIcon="fas fa-plus-circle" actionLabel="Create" />
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-fluid">
@@ -64,18 +42,15 @@
                     <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
                             <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
-                                id="kt_table_users">
+                                id="kt_table_whitelist">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-muted text-uppercase fw-bolder fs-7 gs-0">
                                         <th>#</th>
-                                        <th>Username</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
                                         <th>Phone Number</th>
-                                        <th>Role</th>
-                                        <th class="text-center">Action</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -88,14 +63,9 @@
                 <!--end::Card body-->
             </div>
             <!--end::Card-->
-            {{-- begin:: User modal --}}
-            @include('user.modal.addUserModal')
-            {{-- end:: User modal --}}
-
-            {{-- begin:: User passowrd change modal --}}
-            @include('user.modal.changeUserPasswordModal')
-            {{-- end:: User passowrd change modal --}}
-
+            {{-- begin:: Request Whitelist modal --}}
+            @include('marchant.requestWhitelist.modal.addWhitelistModal')
+            {{-- end:: Request Whitelist modal --}}
         </div>
         <!--end::Container-->
     </div>
@@ -104,8 +74,8 @@
 @section('page_script')
 
     <!-- begin::Page Custom Stylesheets(used by this page) -->
-    <script src="{{ asset('assets/custom/js/user/index.js') }}"
-        {{ Sri::html('assets/custom/js/user/index.js') }}></script>
+    <script src="{{ asset('assets/custom/js/marchant/requestWhitelist/index.js') }}"
+        {{ Sri::html('assets/custom/js/marchant/requestWhitelist/index.js') }}></script>
     <!--end::Page Custom Stylesheets(used by this page)-->
 
 @endsection

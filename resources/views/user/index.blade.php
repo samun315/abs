@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'User List')
 <style nonce="{{ $cspNonce }}">
-    #passwordDiv {
+    .passwordDiv {
         position: relative;
     }
 
@@ -11,7 +11,7 @@
         display: none;
     }
 
-    #togglePasswordBtn {
+    .togglePasswordBtn {
         position: absolute;
         right: 10px;
         top: 50%;
@@ -91,6 +91,10 @@
             {{-- begin:: User modal --}}
             @include('user.modal.addUserModal')
             {{-- end:: User modal --}}
+
+            {{-- begin:: User passowrd change modal --}}
+            @include('user.modal.changeUserPasswordModal')
+            {{-- end:: User passowrd change modal --}}
 
         </div>
         <!--end::Container-->

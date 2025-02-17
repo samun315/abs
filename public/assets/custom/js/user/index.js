@@ -6,12 +6,20 @@ $(document).ready(function () {
 });
 
 let selectedForm = $("#submitForm");
+let selectedPasswordForm = $("#passwordChangeForm");
 // Get the current URL of the window
 const BASE_URL = window.location.origin + "/users";
 
 let search = $("#search");
 
 let validate = selectedForm.validate({
+    rules: {
+        name: "required",
+    },
+    onsubmit: true,
+});
+
+let validatePassword = selectedPasswordForm.validate({
     rules: {
         name: "required",
     },
@@ -26,6 +34,7 @@ $(".formReset").on("click", function () {
 
 function formReset() {
     $("#submitForm").trigger("reset");
+    $("#passwordChangeForm").trigger("reset");
     $("#kt_role_id").val("").change();
     $("#kt_active").val("YES").change();
 }
@@ -132,6 +141,7 @@ $(document).on("click", ".edit-user, .view-user", function () {
     editUserInfo(user_id);
 });
 
+
 function editUserInfo(userId) {
     loader(selectedForm, true);
     $(".error").remove();
@@ -164,6 +174,45 @@ function editUserInfo(userId) {
     });
 }
 
+
+$(document).on("click", ".changePasswordBtn", function () {
+    var id = $(this).attr("data-id");
+    $("#kt_user_id_for_password").val(id);
+});
+
+selectedPasswordForm.submit(function (event) {
+    event.preventDefault();
+
+    if (!validatePassword.valid()) return;
+
+    loader(selectedPasswordForm, true);
+
+    let passwordData = new FormData($("form#passwordChangeForm")[0]);
+
+    // Setup CSRF token
+    setCSRFToken();
+
+    $(".error").remove();
+
+    let userPassId = $("#kt_user_id_for_password").val();
+    let url = "";
+    if (userPassId) {
+        url = BASE_URL + "/reset-password/" + userPassId;
+        passwordData.append("_method", "PUT");
+    }
+
+    $.ajax({
+        url: url,
+        data: passwordData,
+        type: "POST", // Always use POST for FormData, append _method for PUT
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: handleSuccessWithModal,
+        error: handleError,
+    });
+});
+
 // Generic function to toggle password visibility and icon
 function togglePasswordVisibility(buttonSelector, fieldSelector, iconSelector) {
     $(buttonSelector).on("click", function () {
@@ -184,13 +233,13 @@ function togglePasswordVisibility(buttonSelector, fieldSelector, iconSelector) {
 $(".passwordIcon").addClass("fas fa-eye");
 
 // Apply function to each button and field
-togglePasswordVisibility("#togglePasswordBtn", "#kt_password", ".passwordIcon");
+togglePasswordVisibility(".togglePasswordBtn", ".kt_password", ".passwordIcon");
 
-$("#kt_password").on("keyup",function(){
+$(".kt_password").on("keyup",function(){
     if ($(this).val() == "") {
-        $("#togglePasswordBtn").hide();
+        $(".togglePasswordBtn").hide();
     } else {
-        $("#togglePasswordBtn").show();
+        $(".togglePasswordBtn").show();
     }
 });
 

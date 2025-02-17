@@ -72,4 +72,21 @@ class UserController extends Controller
             return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
         }
     }
+
+    public function resetPassword(Request $request, int $userId):JsonResponse
+    {
+        try {
+        
+            $updateUserInfo = $this->userService->resetPassword($request, $userId);
+
+            return sendSuccessResponse(
+                200,
+                'User updated successfully.',
+                'data',
+                $updateUserInfo
+            );
+        } catch (Exception $exception) {
+            return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
+        }
+    }
 }

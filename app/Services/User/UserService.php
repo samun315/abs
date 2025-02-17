@@ -17,9 +17,9 @@ class UserService
 
     public function storeUserInfo(array $data): User|JsonResponse
     {
-            $data['password'] =  Hash::make($data['password']);
+        $data['password'] =  Hash::make($data['password']);
 
-            return User::query()->create($data);
+        return User::query()->create($data);
     }
 
     public function getUserList(Request $request): JsonResponse
@@ -41,10 +41,10 @@ class UserService
         return Datatables::of($query)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                // $viewBtn = '<button data-id="' . $row->id . '" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2 view-user" data-bs-toggle="modal" data-bs-target="#kt_modal_users_view"><i class="fas fa-eye"></i></button>';
+                $changePassBtn = '<button data-id="' . $row->id . '" class="btn btn-warning btn-sm me-2 changePasswordBtn" data-bs-toggle="modal" data-bs-target="#kt_modal_change_password">Reset Password</button>';
 
-                $editBtn = '<button data-id="' . $row->id . '" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm edit-user" data-bs-toggle="modal" data-bs-target="#showModal"><i class="fas fa-edit"></i></button>';
-                return $editBtn;
+                $editBtn = '<button data-id="' . $row->id . '" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm edit-user me-2" data-bs-toggle="modal" data-bs-target="#showModal"><i class="fas fa-edit"></i></button>';
+                return $editBtn . $changePassBtn;
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -61,5 +61,14 @@ class UserService
         $user = $this->getUserInfoById($userId);
 
         return $user->update($updateData);
+    }
+
+    public function resetPassword(Request $request, int $userId): bool
+    {
+        $user = $this->getUserInfoById($userId);
+
+        $data['password'] =  Hash::make($request->password);
+
+        return $user->update($data);
     }
 }

@@ -91,11 +91,11 @@
 
                                     <div class="col-md-6 fv-row mb-5 password">
                                         <label class="required fs-5 fw-bold mb-2">Password</label>
-                                        <div id="passwordDiv">
-                                            <input type="password" name="password" id="kt_password"
-                                                class="form-control form-control-solid bg-gradient @error('password') is-invalid @enderror"
+                                        <div class="passwordDiv">
+                                            <input type="password" name="password"
+                                                class="form-control form-control-solid kt_password bg-gradient @error('password') is-invalid @enderror"
                                                 placeholder="Enter Password" autocomplete="off" required />
-                                            <button type="button" id="togglePasswordBtn">
+                                            <button type="button" class="togglePasswordBtn">
                                                 <i class="passwordIcon"></i>
                                             </button>
                                         </div>

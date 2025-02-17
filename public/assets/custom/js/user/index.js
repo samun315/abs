@@ -1,13 +1,13 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $("#kt_role_id").select2({
         placeholder: "Select Role",
-        allowClear: true
+        allowClear: true,
     });
 });
 
 let selectedForm = $("#submitForm");
 // Get the current URL of the window
-const BASE_URL = window.location.origin+"/users";
+const BASE_URL = window.location.origin + "/users";
 
 let search = $("#search");
 
@@ -18,14 +18,16 @@ let validate = selectedForm.validate({
     onsubmit: true,
 });
 
+$(".password").show();
+
 $(".formReset").on("click", function () {
     formReset();
 });
 
 function formReset() {
     $("#submitForm").trigger("reset");
-    $("#kt_role_id").val('').change();
-    $("#kt_active").val('YES').change();
+    $("#kt_role_id").val("").change();
+    $("#kt_active").val("YES").change();
 }
 
 $("#openUserModal").on("click", function () {
@@ -39,6 +41,8 @@ function openModal() {
     $("#showModal").modal("show");
     $(".modal-title").text("Add New User");
     $(".btnSubmit").text("Add");
+    $(".password").show();
+    $("#togglePasswordBtn").hide();
 }
 
 selectedForm.submit(function (event) {
@@ -48,7 +52,7 @@ selectedForm.submit(function (event) {
 
     loader(selectedForm, true);
 
-    let formData = new FormData($('form#submitForm')[0]);
+    let formData = new FormData($("form#submitForm")[0]);
 
     // Setup CSRF token
     setCSRFToken();
@@ -59,7 +63,7 @@ selectedForm.submit(function (event) {
     let url = "";
     if (userId) {
         url = BASE_URL + "/update/" + userId;
-        formData.append('_method', 'PUT');
+        formData.append("_method", "PUT");
     } else {
         url = BASE_URL + "/store";
     }
@@ -67,7 +71,7 @@ selectedForm.submit(function (event) {
     $.ajax({
         url: url,
         data: formData,
-        type: "POST",  // Always use POST for FormData, append _method for PUT
+        type: "POST", // Always use POST for FormData, append _method for PUT
         cache: false,
         contentType: false,
         processData: false,
@@ -76,11 +80,11 @@ selectedForm.submit(function (event) {
     });
 });
 
-let table = $('#kt_table_users').DataTable({
+let table = $("#kt_table_users").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: BASE_URL+"/index",
+        url: BASE_URL + "/index",
         data: function (d) {
             d.search = search.val();
         },
@@ -128,7 +132,7 @@ $(document).on("click", ".edit-user, .view-user", function () {
     editUserInfo(user_id);
 });
 
-function editUserInfo(userId){
+function editUserInfo(userId) {
     loader(selectedForm, true);
     $(".error").remove();
 
@@ -151,7 +155,42 @@ function editUserInfo(userId){
                 $("#kt_nid").val(data.nid);
                 $("#kt_diamond_per_usd").val(data.diamond_per_usd);
                 $("#kt_active").val(data.active).change();
+
+                $(".password").hide();
+                $(".modal-title").text("Edit User");
+                $(".btnSubmit").text("Update");
             }
         },
     });
 }
+
+// Generic function to toggle password visibility and icon
+function togglePasswordVisibility(buttonSelector, fieldSelector, iconSelector) {
+    $(buttonSelector).on("click", function () {
+        const passwordField = $(fieldSelector);
+        const icon = $(iconSelector);
+
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            icon.removeClass("fas fa-eye").addClass("fa fa-eye-slash");
+        } else {
+            passwordField.attr("type", "password");
+            icon.removeClass("fa fa-eye-slash").addClass("fas fa-eye");
+        }
+    });
+}
+
+// Initial setup of icons
+$(".passwordIcon").addClass("fas fa-eye");
+
+// Apply function to each button and field
+togglePasswordVisibility("#togglePasswordBtn", "#kt_password", ".passwordIcon");
+
+$("#kt_password").on("keyup",function(){
+    if ($(this).val() == "") {
+        $("#togglePasswordBtn").hide();
+    } else {
+        $("#togglePasswordBtn").show();
+    }
+});
+

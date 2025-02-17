@@ -64,7 +64,7 @@ class UserController extends Controller
 
             return sendSuccessResponse(
                 200,
-                'User Role updated successfully.',
+                'User updated successfully.',
                 'data',
                 $updateUserInfo
             );

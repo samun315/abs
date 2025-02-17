@@ -14,7 +14,7 @@
 
             <div class="modal-body">
                 <!--begin::Form-->
-                <form class="card-body px-9" id="submitForm">
+                <form class="px-9 form" id="submitForm">
 
                     @csrf
 
@@ -31,32 +31,41 @@
                                 <!--begin::Row-->
                                 <div class="row">
 
-                                    <div class="col-md-4 fv-row mb-5 full_name">
+                                    <div class="col-md-6 fv-row mb-5 full_name">
                                         <label class="required fs-5 fw-bold mb-2">Full name</label>
                                         <input type="text" name="full_name" id="kt_full_name"
-                                            class="form-control form-control-solid @error('full_name') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('full_name') is-invalid @enderror"
                                             placeholder="Enter full name" required />
-                                    </div>
-                                    
 
-                                    <div class="col-md-4 fv-row mb-5 email">
+                                        @error('full_name')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6 fv-row mb-5 email">
                                         <label class="required fs-5 fw-bold mb-2">Email</label>
                                         <input type="email" name="email" id="kt_email"
-                                            class="form-control form-control-solid @error('email') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('email') is-invalid @enderror"
                                             placeholder="Enter Email" required />
+                                        @error('email')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 phone">
+                                    <div class="col-md-6 fv-row mb-5 phone">
                                         <label class="required fs-5 fw-bold mb-2">Phone</label>
                                         <input type="text" name="phone" id="kt_phone"
-                                            class="form-control form-control-solid @error('phone') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('phone') is-invalid @enderror"
                                             placeholder="Enter Phone" required />
+                                        @error('phone')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 role_id">
+                                    <div class="col-md-6 fv-row mb-5 role_id">
                                         <label class="required fs-5 fw-bold mb-2">User Role</label>
                                         <select name="role_id" id="kt_role_id"
-                                            class="form-select form-select-solid @error('role_id') is-invalid @enderror"
+                                            class="form-select form-select-solid bg-gradient @error('role_id') is-invalid @enderror"
                                             data-control="select2" data-placeholder="Select Role"
                                             data-dropdown-parent="#showModal" required>
                                             <option value=""></option>
@@ -70,52 +79,73 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 user_name">
+                                    <div class="col-md-6 fv-row mb-5 user_name">
                                         <label class="required fs-5 fw-bold mb-2">Username</label>
                                         <input type="text" name="user_name" id="kt_user_name"
-                                            class="form-control form-control-solid @error('user_name') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('user_name') is-invalid @enderror"
                                             placeholder="Enter Username" required />
+                                        @error('user_name')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 password">
+                                    <div class="col-md-6 fv-row mb-5 password">
                                         <label class="required fs-5 fw-bold mb-2">Password</label>
-                                        <input type="password" name="password" id="kt_password"
-                                            class="form-control form-control-solid @error('password') is-invalid @enderror"
-                                            placeholder="Enter Password" required />
+                                        <div id="passwordDiv">
+                                            <input type="password" name="password" id="kt_password"
+                                                class="form-control form-control-solid bg-gradient @error('password') is-invalid @enderror"
+                                                placeholder="Enter Password" autocomplete="off" required />
+                                            <button type="button" id="togglePasswordBtn">
+                                                <i class="passwordIcon"></i>
+                                            </button>
+                                        </div>
+                                        <span id="error-message" class="error-message">This field is required.</span>
                                     </div>
 
                                     <div class="col-md-12 fv-row mb-5 address">
                                         <label class="required fs-5 fw-bold mb-2">Address</label>
                                         <textarea type="text" name="address" id="kt_address"
-                                            class="form-control form-control-solid @error('address') is-invalid @enderror"
-                                            placeholder="Enter Address" required ></textarea>
+                                            class="form-control form-control-solid bg-gradient @error('address') is-invalid @enderror"
+                                            placeholder="Enter Address...." required></textarea>
+                                        @error('address')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 country">
+                                    <div class="col-md-6 fv-row mb-5 country">
                                         <label class="fs-5 fw-bold mb-2">Country</label>
                                         <input type="text" name="country" id="kt_country"
-                                            class="form-control form-control-solid @error('country') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('country') is-invalid @enderror"
                                             placeholder="Enter Country" />
+                                        @error('country')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 nid">
+                                    <div class="col-md-6 fv-row mb-5 nid">
                                         <label class="fs-5 fw-bold mb-2">NID</label>
                                         <input type="number" name="nid" id="kt_nid"
-                                            class="form-control form-control-solid @error('nid') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('nid') is-invalid @enderror"
                                             placeholder="Enter NID number" />
+                                        @error('nid')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 diamond_per_usd">
+                                    <div class="col-md-6 fv-row mb-5 diamond_per_usd">
                                         <label class="required fs-5 fw-bold mb-2">USD to Diamond</label>
                                         <input type="number" name="diamond_per_usd" id="kt_diamond_per_usd"
-                                            class="form-control form-control-solid @error('diamond_per_usd') is-invalid @enderror"
+                                            class="form-control form-control-solid bg-gradient @error('diamond_per_usd') is-invalid @enderror"
                                             placeholder="Enter USD to Diamond" required />
+                                        @error('diamond_per_usd')
+                                            <span class="text-danger mt-2">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="col-md-4 fv-row mb-5 active">
+                                    <div class="col-md-6 fv-row mb-5 active">
                                         <label class="required fs-5 fw-bold mb-2">Active</label>
                                         <select name="active" id="kt_active" data-placeholder="Select active Status"
-                                            class="form-select form-select-solid @error('active') is-invalid @enderror"
+                                            class="form-select form-select-solid bg-gradient @error('active') is-invalid @enderror"
                                             data-control="select2" data-dropdown-parent="#showModal">
                                             <option value=""></option>
                                             <option value="YES">YES</option>

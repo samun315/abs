@@ -28,8 +28,12 @@ class UserRequest extends FormRequest
         $validationData['email'] = ['required', 'email', 'unique:users'];
         $validationData['phone'] = ['required', 'string', 'unique:users'];
         $validationData['role_id'] = ['required', 'numeric'];
-        $validationData['user_name'] = ['required', 'string'];
-        $validationData['password'] = ['required', 'string'];
+        $validationData['user_name'] = ['required', 'string', 'unique:users'];
+        if ($this->input('id')) {
+            $validationData['password'] = ['nullable'];
+        } else {
+            $validationData['password'] = ['required', 'string'];
+        }
         $validationData['address'] = ['required', 'string'];
         $validationData['country'] = ['nullable', 'string'];
         $validationData['nid'] = ['nullable', 'numeric', 'unique:users'];
@@ -38,6 +42,7 @@ class UserRequest extends FormRequest
 
 
         if ($this->input('id')) {
+            $validationData['user_name'] = ['required', Rule::unique('users', 'user_name')->ignore($this->input('id'), 'id')];
             $validationData['phone'] = ['required', Rule::unique('users', 'phone')->ignore($this->input('id'), 'id')];
             $validationData['email'] = ['required', Rule::unique('users', 'email')->ignore($this->input('id'), 'id')];
             $validationData['nid'] = ['required', Rule::unique('users', 'nid')->ignore($this->input('id'), 'id')];
@@ -55,7 +60,10 @@ class UserRequest extends FormRequest
         $inputData['phone'] = $this->input('phone');
         $inputData['role_id'] = $this->input('role_id');
         $inputData['user_name'] = $this->input('user_name');
-        $inputData['password'] = $this->input('password');
+
+        if (empty($this->input('id'))) {
+            $inputData['password'] = $this->input('password');
+        }
         $inputData['address'] = $this->input('address');
         $inputData['country'] = $this->input('country') ?? null;
         $inputData['nid'] = $this->input('nid') ?? null;

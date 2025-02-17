@@ -1,8 +1,28 @@
 @extends('master')
 @section('title', 'User List')
+<style nonce="{{ $cspNonce }}">
+    #passwordDiv {
+        position: relative;
+    }
 
+    #error-message {
+        color: red;
+        font-size: 14px;
+        display: none;
+    }
+
+    #togglePasswordBtn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+</style>
 @section('content')
-<x-toolbar-component title="User List" :breadcrumbs="[
+    <x-toolbar-component title="User List" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
         ['label' => 'User Management', 'url' => 'javascript:void(0)'],
         ['label' => 'Access Control', 'url' => 'javascript:void(0)'],
@@ -32,7 +52,7 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
-                            <x-search/>
+                            <x-search />
                         </div>
                         <!--end::Search-->
                     </div>

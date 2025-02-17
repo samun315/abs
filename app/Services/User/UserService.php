@@ -53,13 +53,13 @@ class UserService
 
     public function getUserInfoById(int $userId): Model|Collection|Builder|array|null
     {
-        return User::query()->findOrFail($userId);
+        return User::query()->find($userId);
     }
 
     public function updateUserInfo(array $updateData, int $userId): bool
     {
-        $userRole = $this->getUserInfoById($userId);
+        $user = $this->getUserInfoById($userId);
 
-        return $userRole->update($updateData);
+        return $user->update($updateData);
     }
 }

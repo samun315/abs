@@ -34,12 +34,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/menu/menu.php'));
             //End Menu Menu-item Route
 
-                      //Start Request whitelist Route
-                      Route::middleware(['web', 'preventBackHistory', 'user'])
-                      ->prefix('marchant')
-                      ->name('marchant.request.')
-                      ->group(base_path('routes/marchant/whitelist.php'));
-                  //End Request whitelist Route
+            //Start Request whitelist Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('marchant')
+                ->name('marchant.request.')
+                ->group(base_path('routes/marchant/whitelist.php'));
+            //End Request whitelist Route
+
+            
+            //Start Payment Gateway Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('payment')
+                ->name('payment.manual.')
+                ->group(base_path('routes/payment/paymentGateway.php'));
+            //End Payment Gateway Route
 
             //****Start Api Route******//
             Route::middleware(['api'])

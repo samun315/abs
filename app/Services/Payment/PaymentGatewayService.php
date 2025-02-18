@@ -36,11 +36,18 @@ class PaymentGatewayService
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
 
+                $detailsBtn = '<button type="button" data-id="' . $row->id . '" class="btn btn-info btn-sm detailsGatewayBtn me-2" data-bs-toggle="modal" data-bs-target="#showDetailModal">Details</button>';
+
                 $editBtn = '<button data-id="' . $row->id . '" class="btn btn-warning btn-sm editGatewayBtn me-2" data-bs-toggle="modal" data-bs-target="#showModal">Edit</button>';
 
                 $deleteBtn = '<button type="button" data-id="' . $row->id . '" class="btn btn-danger btn-sm deleteGatewayBtn" >Delete</button>';
 
-                return $editBtn . $deleteBtn;
+                $button = '<div class="btn-group" role="group" aria-label="Basic example">
+                ' . $detailsBtn . '
+                ' . $editBtn . '
+                 ' . $deleteBtn . '
+                </div>';
+                return $button;
             })
             ->rawColumns(['action'])
             ->make(true);

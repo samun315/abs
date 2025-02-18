@@ -18,6 +18,7 @@ $(".formReset").on("click", function () {
 
 function formReset() {
     $("#submitForm").trigger("reset");
+    $("#kt_currency_code").val("").trigger("change");
 }
 
 $("#openGatewayModal").on("click", function () {
@@ -25,7 +26,6 @@ $("#openGatewayModal").on("click", function () {
 });
 
 function openModal() {
-    formReset();
     loader(selectedForm, false);
     $("#kt_gateway_id").val(null);
     $(".modal-title").text("Add New Gateway");
@@ -63,7 +63,14 @@ selectedForm.submit(function (event) {
         cache: false,
         contentType: false,
         processData: false,
-        success: handleSuccessWithModal,
+        success: function (response) {
+            if (response?.statusCode === 200 || response?.statusCode === 201) {
+                $("#showModal").modal("hide");
+                formReset();
+                toastr.success(response?.message);
+                table.draw();
+            }
+        },
         error: handleError,
     });
 });
@@ -87,12 +94,8 @@ let table = $("#kt_table_gateway").DataTable({
         {
             data: "gateway_name",
             name: "gateway_name",
-        }, 
+        },
         {
-            data: "details",
-            name: "details",
-        },  
-         {
             data: "currency_code",
             name: "currency_code",
         },
@@ -178,21 +181,21 @@ function editGatewayInfo(gatewayId) {
         type: "GET",
         success: function (response) {
             loader(selectedForm, false);
-            const data = response.userInfo;
-            // console.log(data.item);
-            if (response?.success && response?.statusCode === 200 && data) {
-                $("#kt_user_id").val(data.id);
-                $("#kt_role_id").val(data.role_id).change();
-                $("#kt_full_name").val(data.full_name);
-                $("#kt_email").val(data.email);
-                $("#kt_phone").val(data.phone);
-                $("#kt_user_name").val(data.user_name);
-                $("#kt_address").val(data.address);
-                $("#kt_country").val(data.country);
-                $("#kt_nid").val(data.nid);
-                $("#kt_diamond_per_usd").val(data.diamond_per_usd);
-                $("#kt_active").val(data.active).change();
+            let gatewayInfo = response.gatewayInfo;
 
+            if (
+                response?.success &&
+                response?.statusCode === 200 &&
+                gatewayInfo
+            ) {
+                $("#kt_gateway_name").val(gatewayInfo.gateway_name);
+                $("#kt_details").val(gatewayInfo.details);
+                $("#kt_currency_code").val(gatewayInfo.currency_code).change();
+                $("#kt_rate").val(gatewayInfo.rate);
+
+                if (editorInstance) {
+                    editorInstance.setData(gatewayInfo.details); // Set CKEditor content dynamically
+                }
                 $(".modal-title").text("Edit Gateway");
                 $(".btnSubmit").text("Update");
             }
@@ -200,33 +203,97 @@ function editGatewayInfo(gatewayId) {
     });
 }
 
+let editorInstance; // Global variable to store CKEditor instance
 
 // Initialize CKEditor
 document.addEventListener("DOMContentLoaded", () => {
-    const detailsElement = document.querySelector(".details");
+    const termsElements = document.querySelectorAll(".details");
 
-    if (detailsElement) {
-        ClassicEditor.create(detailsElement, {
-            styleNonce: "{{ $cspNonce }}",
-        })
-            .then((editor) => {
-                document.querySelector(".btnSubmit").addEventListener("click", (e) => {
-                    let terms = editor.getData().trim(); // Get CKEditor 5 content
+    if (termsElements.length > 0) {
+        termsElements.forEach((element, index) => {
+            ClassicEditor.create(element, {
+                styleNonce: "{{ $cspNonce }}",
+            })
+                .then((editor) => {
+                    editorInstance = editor;
+                })
+                .catch((error) => {
+                    console.error(
+                        `Error initializing editor for element ${index + 1}:`,
+                        error
+                    );
+                });
 
-                    if (terms === "" || terms === "<p><br></p>") {
-                        document.querySelector(".terms_error").textContent = "Details field is required.";
-                        document.querySelector(".terms_error").style.color = "red";
+            $("#btnSubmit").on("click", function (e) {
+                if (editorInstance) {
+                    let terms = editorInstance.getData().trim(); // Get CKEditor 5 content
+
+                    if (terms === "" || terms == "<p><br></p>") {
+                        $(".terms_error")
+                            .text("Details field is required.")
+                            .css("color", "red");
                         e.preventDefault();
                     } else {
-                        document.querySelector(".terms_error").textContent = ""; // Clear error if valid
+                        $(".terms_error").text(""); // Clear error if valid
                     }
-                });
-            })
-            .catch((error) => {
-                console.error("Error initializing CKEditor:", error);
+                } else {
+                    console.error("CKEditor instance not initialized.");
+                }
             });
+        });
     } else {
-        console.warn("No element with the class '.details' found.");
+        console.warn("No elements with the class '.details' found.");
     }
 });
 
+$(document).on("click", ".detailsGatewayBtn", function () {
+    let id = $(this).attr("data-id");
+    getPaymentGatewayDetails(id);
+});
+
+function getPaymentGatewayDetails(id) {
+    loader(selectedForm, true);
+
+    fetch(`${BASE_URL}/get-gateway-details/${id}`)
+        .then((response) => response.json())
+        .then((response) => {
+            loader(selectedForm, false);
+            let data = response.gatewayInfo;
+            const detailsElement = document.getElementById("kt_details_id");
+
+            if (
+                response?.success &&
+                response?.statusCode === 200 &&
+                data &&
+                detailsElement
+            ) {
+                detailsElement.innerHTML = data.details; // Insert HTML content
+                styleTables(detailsElement); // Apply table styles dynamically
+            } else {
+                console.warn("No valid details found.");
+            }
+        })
+        .catch((error) => {
+            loader(selectedForm, false);
+            console.error("Error fetching payment gateway details:", error);
+        });
+}
+
+// Function to apply Bootstrap or custom styling to tables inside the content
+function styleTables(container) {
+    const tables = container.querySelectorAll("table");
+    tables.forEach((table) => {
+        table.classList.add(
+            "table",
+            "table-bordered",
+            "table-striped",
+            "align-middle",
+            "table-responsive",
+            "table-row-dashed",
+            "fs-7",
+            "gx-5",
+            "gy-5",
+            "no-footer"
+        ); // Apply Bootstrap styles
+    });
+}

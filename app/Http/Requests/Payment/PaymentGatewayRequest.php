@@ -11,7 +11,7 @@ class PaymentGatewayRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,30 @@ class PaymentGatewayRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'gateway_name' => 'required',
+            'details' => 'nullable',
+            'currency_code' => 'required',
+            'rate' => 'required',
         ];
+    }
+
+    public function fields(): array
+    {
+        $inputData = [];
+
+        $inputData['gateway_name'] = $this->input('gateway_name') ?? null;
+        $inputData['details'] = $this->input('details') ?? null;
+        $inputData['currency_code'] = $this->input('currency_code') ?? null;
+        $inputData['rate'] = $this->input('rate') ?? null;
+        
+        if ($this->input('id')) {
+            $inputData['updated_by'] = loggedInUserId();
+            $inputData['updated_at'] = createdAtDateConvertToDB();
+        } else {
+            $inputData['created_by'] = loggedInUserId();
+            $inputData['created_at'] = createdAtDateConvertToDB();
+        }
+
+        return $inputData;
     }
 }

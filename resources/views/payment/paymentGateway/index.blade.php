@@ -1,5 +1,22 @@
 @extends('master')
 @section('title', 'Manual Gateway')
+<style nonce="{{$cspNonce}}">
+    #kt_details_id table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#kt_details_id th, #kt_details_id td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#kt_details_id tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+</style>
 @section('content')
     <x-toolbar-component title="Manual Gateway list" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
@@ -49,7 +66,6 @@
                                     <tr class="text-start text-muted text-uppercase fw-bolder fs-7 gs-0">
                                         <th>#</th>
                                         <th>Gateway</th>
-                                        <th>Details</th>
                                         <th>Currency</th>
                                         <th>Rate</th>
                                         <th>Status</th>
@@ -69,6 +85,10 @@
             {{-- begin:: Manual Gateway modal --}}
             @include('payment.paymentGateway.modal.addGatewayModal')
             {{-- end:: Manual Gateway modal --}}
+
+                {{-- begin:: Gateway Details modal --}}
+                @include('payment.paymentGateway.modal.detailsModal')
+                {{-- end:: Gateway Details modal --}}
         </div>
         <!--end::Container-->
     </div>

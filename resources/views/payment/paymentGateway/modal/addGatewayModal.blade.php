@@ -32,7 +32,7 @@
                                 <div class="row">
                                     <div class="col-md-12 fv-row mb-5 gateway">
                                         <label class="required fs-5 fw-bold mb-2">Gateway</label>
-                                        <input type="text" name="gateway_name"
+                                        <input type="text" name="gateway_name" id="kt_gateway_name"
                                             class="form-control form-control-solid gateway_name bg-gradient @error('gateway_name') is-invalid @enderror"
                                             placeholder="Enter Gateway name" autocomplete="off" required />
                                         @error('gateway_name')
@@ -52,14 +52,14 @@
 
                                     <div class="col-md-12 fv-row mb-5">
                                         <label class="required fs-5 fw-bold mb-2">Currency</label>
-                                        <select name="currency_code"
+                                        <select name="currency_code" id="kt_currency_code"
                                             class="form-select form-select-solid @error('currency_code') is-invalid @enderror"
                                             data-control="select2" data-placeholder="Select Currency" required>
                                             <option value=""></option>
                                             @foreach ($currencyCodes as $currencyCode)
-                                                <option value="{{ $currencyCode }}"
-                                                    @if (old('currency_code') == $currencyCode) selected @endif>
-                                                    {{ $currencyCode }}</option>
+                                                <option value="{{ $currencyCode?->currency_code }}"
+                                                    @if (old('currency_code') == $currencyCode?->currency_code) selected @endif>
+                                                    {{ $currencyCode?->currency_code }}</option>
                                             @endforeach
                                         </select>
                                         @error('currency_code')
@@ -69,7 +69,7 @@
 
                                     <div class="col-md-12 fv-row mb-5 gateway">
                                         <label class="required fs-5 fw-bold mb-2">Rate</label>
-                                        <input type="text" name="rate"
+                                        <input type="text" name="rate" id="kt_rate"
                                             class="form-control form-control-solid rate bg-gradient @error('rate') is-invalid @enderror"
                                             placeholder="Enter Rate" autocomplete="off" required />
                                         @error('rate')

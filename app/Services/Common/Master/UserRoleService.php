@@ -21,8 +21,8 @@ class UserRoleService
 
         // If search keyword is present, apply search filter
         if ($searchKeyword) {
-            $query->where('role_name', 'ilike', '%' . $searchKeyword . '%')
-                ->orWhere('active', 'ilike', '%' . $searchKeyword . '%');
+            $query->where('role_name', 'like', '%' . $searchKeyword . '%')
+                ->orWhere('active', 'like', '%' . $searchKeyword . '%');
         }
 
         return Datatables::of($query)

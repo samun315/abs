@@ -159,7 +159,7 @@ let table = $("#kt_table_gateway").DataTable({
                 style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
             },
             exportOptions: {
-                columns: ":not(:first-child)", // Exclude the first column (DT_RowIndex)
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
             },
         },
         {
@@ -170,7 +170,7 @@ let table = $("#kt_table_gateway").DataTable({
                 style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
             },
             exportOptions: {
-                columns: ":not(:first-child)", // Exclude the first column (DT_RowIndex)
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
             },
         },
     ],

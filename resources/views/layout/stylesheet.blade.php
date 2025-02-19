@@ -1,5 +1,5 @@
 <base href="../../">
-<title>@yield('title') | BracNet - ERP </title>
+<title>@yield('title') | ABS </title>
 
 <meta charset="utf-8" />
 <meta http-equiv="Content-Security-Policy"

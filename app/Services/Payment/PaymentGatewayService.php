@@ -52,4 +52,11 @@ class PaymentGatewayService
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function updateGatewayInfo(array $updateData, int $gatewayId): bool
+    {
+        $user = PaymentGateway::query()->where('id', $gatewayId)->first();
+
+        return $user->update($updateData);
+    }
 }

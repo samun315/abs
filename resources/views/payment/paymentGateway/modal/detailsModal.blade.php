@@ -29,12 +29,6 @@
                                         <label class="fs-5 fw-bold mb-2">Details :</label>
                                         <div id="kt_details_id"></div>
                                     </div>
-
-                                    <div class="col-md-12 d-flex justify-content-end mt-3">
-                                        <button type="button" class="btn btn-light me-2 formReset"
-                                            data-bs-dismiss="modal">Close
-                                        </button>
-                                    </div>
                                 </div>
                                 <!--end::Row-->
                             </div>
@@ -43,6 +37,13 @@
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Step 1-->
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-light me-2 formReset"
+                        data-bs-dismiss="modal">Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>

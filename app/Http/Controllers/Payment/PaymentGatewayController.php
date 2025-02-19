@@ -66,6 +66,38 @@ class PaymentGatewayController extends Controller
             return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
         }
     }
+
+    public function update(PaymentGatewayRequest $request, int $gatewayId): JsonResponse
+    {
+        try {
+
+            $updateGatewayInfo = $this->paymentGatewayService->updateGatewayInfo($request->fields(), $gatewayId);
+
+            return sendSuccessResponse(
+                200,
+                'Payment Gateway updated successfully.',
+                'data',
+                $updateGatewayInfo
+            );
+        } catch (Exception $exception) {
+            return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
+        }
+    }
+
     
+    public function destroy(int $gatewayId): JsonResponse|bool
+    {
+        try {
+            $gatewayItem = PaymentGateway::query()->where('id', $gatewayId)->first();
+
+            if (!empty($gatewayItem)) {
+                $deleteItem = $gatewayItem->delete();
+                return sendSuccessResponse(200, 'Successfully deleted gateway', 'data', $deleteItem);
+            }
+            return true;
+        } catch (Exception $exception) {
+            return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
+        }
+    }
     
 }

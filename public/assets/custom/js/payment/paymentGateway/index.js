@@ -19,6 +19,10 @@ $(".formReset").on("click", function () {
 function formReset() {
     $("#submitForm").trigger("reset");
     $("#kt_currency_code").val("").trigger("change");
+    
+    if (editorInstance) {
+        editorInstance.setData(""); // Set CKEditor content dynamically
+    }
 }
 
 $("#openGatewayModal").on("click", function () {
@@ -74,6 +78,15 @@ selectedForm.submit(function (event) {
         error: handleError,
     });
 });
+
+// success: function (response) {
+//     if (response?.statusCode === 200 || response?.statusCode === 201) {
+//         $("#showModal").modal("hide");
+//         formReset();
+//         toastr.success(response?.message);
+//         table.draw();
+//     }
+// },
 
 let table = $("#kt_table_gateway").DataTable({
     processing: true,
@@ -188,8 +201,9 @@ function editGatewayInfo(gatewayId) {
                 response?.statusCode === 200 &&
                 gatewayInfo
             ) {
+                $("#kt_gateway_id").val(gatewayInfo.id);
                 $("#kt_gateway_name").val(gatewayInfo.gateway_name);
-                $("#kt_details").val(gatewayInfo.details);
+                // $("#kt_details").val(gatewayInfo.details);
                 $("#kt_currency_code").val(gatewayInfo.currency_code).change();
                 $("#kt_rate").val(gatewayInfo.rate);
 
@@ -203,8 +217,7 @@ function editGatewayInfo(gatewayId) {
     });
 }
 
-let editorInstance; // Global variable to store CKEditor instance
-
+let editorInstance;
 // Initialize CKEditor
 document.addEventListener("DOMContentLoaded", () => {
     const termsElements = document.querySelectorAll(".details");
@@ -224,22 +237,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
                 });
 
-            $("#btnSubmit").on("click", function (e) {
-                if (editorInstance) {
-                    let terms = editorInstance.getData().trim(); // Get CKEditor 5 content
-
-                    if (terms === "" || terms == "<p><br></p>") {
-                        $(".terms_error")
-                            .text("Details field is required.")
-                            .css("color", "red");
-                        e.preventDefault();
+                $(".btnSubmit").on("click", function (e) {
+                    if (editorInstance) {
+                        $("textarea.details").val(editorInstance.getData()); // Manually update textarea
+                        let terms = $("textarea.details").val().trim();
+                
+                        if (terms === "" || terms === "<p><br></p>") {
+                            $(".terms_error")
+                                .text("Details field is required.")
+                                .css("color", "red");
+                            e.preventDefault();
+                        } else {
+                            $(".terms_error").text(""); // Clear error if valid
+                        }
                     } else {
-                        $(".terms_error").text(""); // Clear error if valid
+                        console.error("CKEditor instance not initialized.");
+                        e.preventDefault();
                     }
-                } else {
-                    console.error("CKEditor instance not initialized.");
-                }
-            });
+                });
+                
         });
     } else {
         console.warn("No elements with the class '.details' found.");
@@ -296,4 +312,52 @@ function styleTables(container) {
             "no-footer"
         ); // Apply Bootstrap styles
     });
+}
+
+
+$(document).on("click", ".deleteGatewayBtn", function () {
+    let deleteId = $(this).attr("data-id");
+    deleteData(deleteId);
+});
+
+function deleteData(deleteId) {
+    Swal.fire({
+        html: `Are you want to delete this?`,
+        icon: "info",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Yes, do it!",
+        cancelButtonText: "Nope, cancel it",
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger",
+        },
+    }).then(
+        function (e) {
+            if (e.value === true) {
+                setCSRFToken();
+                $.ajax({
+                    type: "DELETE",
+                    url: BASE_URL + "/destroy/" + deleteId,
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response?.statusCode === 200) {
+                            toastr.success(response?.message, "Success!");
+                            table.draw();
+                        } 
+                    },
+                    error: function (data) {
+                        toastr.error(
+                            data?.message || "An unexpected error occurred."
+                        );
+                    },
+                });
+            } else {
+                e.dismiss;
+            }
+        },
+        function (dismiss) {
+            return false;
+        }
+    );
 }

@@ -75,7 +75,7 @@ let table = $("#currecny-table").DataTable({
         {
             extend: "excelHtml5",
             text: "Excel",
-            className: "btn btn-success btn-sm",
+            className: "btn btn-info btn-sm",
             attr: {
                 style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
             },

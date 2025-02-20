@@ -26,10 +26,10 @@ class PermissionService
 
         if ($searchKeyword) {
             $query->where(function ($q) use ($searchKeyword) {
-                $q->where('name', 'ilike', '%' . $searchKeyword . '%')
-                    ->orWhere('slug', 'ilike', '%' . $searchKeyword . '%')
+                $q->where('name', 'like', '%' . $searchKeyword . '%')
+                    ->orWhere('slug', 'like', '%' . $searchKeyword . '%')
                     ->orWhereHas('moduleItem', function ($q) use ($searchKeyword) {
-                        $q->where('item_name', 'ilike', '%' . $searchKeyword . '%');
+                        $q->where('item_name', 'like', '%' . $searchKeyword . '%');
                     });
             });
         }

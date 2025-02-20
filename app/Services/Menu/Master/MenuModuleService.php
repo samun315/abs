@@ -21,8 +21,8 @@ class MenuModuleService
 
         // If search keyword is present, apply search filter
         if ($searchKeyword) {
-            $query->where('module_name', 'ilike', '%' . $searchKeyword . '%')
-                ->orWhere('active', 'ilike', '%' . $searchKeyword . '%');
+            $query->where('module_name', 'like', '%' . $searchKeyword . '%')
+                ->orWhere('active', 'like', '%' . $searchKeyword . '%');
         }
 
         return Datatables::of($query)

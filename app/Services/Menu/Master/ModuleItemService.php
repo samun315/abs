@@ -24,10 +24,10 @@ class ModuleItemService
 
         if ($searchKeyword) {
             $query->where(function ($q) use ($searchKeyword) {
-                $q->where('item_name', 'ilike', '%' . $searchKeyword . '%')
-                    ->orWhere('active', 'ilike', '%' . $searchKeyword . '%')
+                $q->where('item_name', 'like', '%' . $searchKeyword . '%')
+                    ->orWhere('active', 'like', '%' . $searchKeyword . '%')
                     ->orWhereHas('module', function ($q) use ($searchKeyword) {
-                        $q->where('module_name', 'ilike', '%' . $searchKeyword . '%');
+                        $q->where('module_name', 'like', '%' . $searchKeyword . '%');
                     });
             });
         }

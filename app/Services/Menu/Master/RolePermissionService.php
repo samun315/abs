@@ -30,9 +30,9 @@ class RolePermissionService
 
         if ($searchKeyword) {
             $query->where(function ($q) use ($searchKeyword) {
-                $q->where('menu_role_permission_id', 'ilike', '%' . $searchKeyword . '%')
+                $q->where('menu_role_permission_id', 'like', '%' . $searchKeyword . '%')
                     ->orWhereHas('userRole', function ($q) use ($searchKeyword) {
-                        $q->where('role_name', 'ilike', '%' . $searchKeyword . '%');
+                        $q->where('role_name', 'like', '%' . $searchKeyword . '%');
                     });
             });
         }

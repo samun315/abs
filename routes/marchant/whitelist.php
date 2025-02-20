@@ -12,5 +12,5 @@ Route::group(['prefix' => 'request', 'as' => 'whitelist.'], function () {
 
 Route::group(['prefix' => 'all/whitelist/request', 'as' => 'approve.whitelist.'], function () {
     Route::get('/', [RequestWhitelistApproveController::class, 'index'])->name('index');
-    Route::post('/whitelist/store', [RequestWhitelistApproveController::class, 'store'])->name('store');
+    Route::put('/update-status/{id}', [RequestWhitelistApproveController::class, 'updateStatus'])->name('updateStatus');
 });

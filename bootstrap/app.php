@@ -40,7 +40,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('marchant.request.')
                 ->group(base_path('routes/marchant/whitelist.php'));
             //End Request whitelist Route
-            
+
+            //Start Balance Request Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('marchant')
+                ->name('marchant.balance.request.')
+                ->group(base_path('routes/marchant/balanceRequest.php'));
+            //End Balance Request Route
+
             //Start Payment Gateway Route
             Route::middleware(['web', 'preventBackHistory', 'user'])
                 ->prefix('payment')

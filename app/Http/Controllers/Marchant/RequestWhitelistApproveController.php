@@ -23,4 +23,20 @@ class RequestWhitelistApproveController extends Controller
 
         return view('marchant.approveWhitelist.index');
     }
+
+    public function updateStatus(Request $request, int $id): JsonResponse
+    {
+        // Get currency ID and status from the request
+        $status = $request->input('status');
+
+        try {
+            // Update the status of the currency
+            $whitelist = $this->requestWhitelistApproveService->updateWhitelistStatus(['status' => $status], $id);
+
+            return sendSuccessResponse(200, 'Whitelist status updated successfully.');
+        } catch (Exception $e) {
+            // Handle any exceptions during status update
+            return sendErrorResponse('Internal Server Error: ', $e->getMessage(), $e->getCode() ?? 500);
+        }
+    }
 }

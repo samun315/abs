@@ -102,9 +102,9 @@ search.keyup(function () {
 });
 
 $(document).on("change", ".activeStatus", function () {
-    var Id = $(this).attr("data-id");
-    var active = $("#toggleData_" + Id).val();
-    updateActiveStatus(active, Id);
+    let id = $(this).attr("data-id");
+    let active = $("#toggleData_" + id).val();
+    updateActiveStatus(active, id);
 });
 
 function updateActiveStatus(active, id) {

@@ -207,8 +207,8 @@ let approveTable = $("#kt_table_approve_whitelist").DataTable({
             searchable: false,
         },
         {
-            data: "full_name",
-            name: "full_name",
+            data: "user",
+            name: "user",
         },
         {
             data: "mobile_number",
@@ -283,3 +283,52 @@ let approveTable = $("#kt_table_approve_whitelist").DataTable({
 serchId.keyup(function () {
     approveTable.draw();
 });
+
+$(document).on("click", ".approveWhitelistBtn,.suspendWhitelistBtn", function () {
+    let id = $(this).attr("data-id");
+    let status = $(this).attr("data-status");
+    updateWhitelistStatus(status, id);
+});
+
+function updateWhitelistStatus(status, id) {
+    Swal.fire({
+        html: `Are you want to ${status} this?`,
+        icon: "info",
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: "Yes, do it!",
+        cancelButtonText: "Nope, cancel it",
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger",
+        },
+    }).then(
+        function (e) {
+            if (e.value === true) {
+                setCSRFToken();
+                $.ajax({
+                    type: "PUT",
+                    url: BASE_URL + "/all/whitelist/request/update-status/" + id,
+                    data: {status},
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response?.statusCode === 200) {
+                            toastr.success(response?.message, "Success!");
+                            approveTable.draw();
+                        } 
+                    },
+                    error: function (data) {
+                        toastr.error(
+                            data?.message || "An unexpected error occurred."
+                        );
+                    },
+                });
+            } else {
+                e.dismiss;
+            }
+        },
+        function (dismiss) {
+            return false;
+        }
+    );
+}

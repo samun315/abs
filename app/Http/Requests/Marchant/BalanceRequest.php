@@ -11,7 +11,7 @@ class BalanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,26 @@ class BalanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'mobile_number' => 'required',
+            'amount' => 'required',
         ];
+    }
+
+    public function fields(): array
+    {
+        $inputData = [];
+
+        $inputData['mobile_number'] = $this->input('mobile_number');
+        $inputData['amount'] = $this->input('amount');
+        
+        if ($this->input('id')) {
+            $inputData['updated_by'] = loggedInUserId();
+            $inputData['updated_at'] = createdAtDateConvertToDB();
+        } else {
+            $inputData['created_by'] = loggedInUserId();
+            $inputData['created_at'] = createdAtDateConvertToDB();
+        }
+
+        return $inputData;
     }
 }

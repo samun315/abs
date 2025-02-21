@@ -35,14 +35,8 @@ class BalanceRequestService
             ->make(true);
     }
 
-    public function updateWhitelistStatus(array $updateData, int $id): Model
+    public function storeBalanceRequest(array $data): Model
     {
-        // Find the whitelist by its ID or fail if not found.
-        $whitelist = RequestWhitelist::query()->where('id', $id)->first();
-
-        // Update the whitelist with the provided data.
-        $whitelist->update($updateData);
-
-        return $whitelist;
+        return BalanceRequest::query()->create($data);
     }
 }

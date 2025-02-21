@@ -52,7 +52,7 @@
 
                                     <div class="col-md-12 fv-row mb-5 password">
                                         <label class="required fs-5 fw-bold mb-2">Amount</label>
-                                        <input type="number" name="amount"
+                                        <input type="number" name="amount" id="kt_amount"
                                             class="form-control form-control-solid amount bg-gradient @error('amount') is-invalid @enderror"
                                             placeholder="Enter Amount" autocomplete="off" required />
                                         @error('amount')

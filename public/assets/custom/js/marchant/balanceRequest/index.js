@@ -104,7 +104,7 @@ let table = $("#kt_table_balance_request").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: BASE_URL + "/balance/request",
+        url: BASE_URL + "/all/balance/request",
         data: function (d) {
             d.search = search.val();
         },
@@ -186,14 +186,115 @@ search.keyup(function () {
     table.draw();
 });
 
+// APPROVE BALANCE REQUEST START
 
-$(document).on("click", ".approveWhitelistBtn,.suspendWhitelistBtn", function () {
-    let id = $(this).attr("data-id");
-    let status = $(this).attr("data-status");
-    updateWhitelistStatus(status, id);
+let serchId = $("#search");
+
+let approveTable = $("#kt_table_approve_balance_request").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: BASE_URL + "/all/balance/request",
+        data: function (d) {
+            d.search = serchId.val();
+        },
+    },
+    columns: [
+        {
+            data: "DT_RowIndex",
+            name: "DT_RowIndex",
+            orderable: false,
+            searchable: false,
+        },
+        {
+            data: "user",
+            name: "user",
+        },
+        {
+            data: "mobile_number",
+            name: "mobile_number",
+        },
+        {
+            data: "amount",
+            name: "amount",
+        },
+        {
+            data: "status",
+            render: function (data) {
+                if (!data) return "";
+
+                let status = "";
+
+                if (data == "Pending") {
+                    status = "badge badge-warning";
+                } else if (data == "Transferred") {
+                    status = "badge badge-success";
+                } else {
+                    status = "badge badge-danger";
+                }
+
+                return `<p class="${status} ">${data}</p>`;
+            },
+        },
+        {
+            data: "created_at",
+            render: formatDate,
+        },
+        {
+            data: "action",
+            name: "action",
+        },
+    ],
+    columnDefs: [
+        {
+            targets: "_all",
+            defaultContent: "",
+        },
+    ],
+    paging: true, // Enables pagination
+    pageLength: 10, // Show 5 records per page
+    lengthMenu: [10, 25, 50, 75, 100, 200], // Dropdown for selecting number of rows
+    dom:
+        '<"row"<"col-sm-2"l><"col-sm-10 d-flex justify-content-end"B>>' + // Length menu & buttons
+        '<"row"<"col-sm-12"tr>>' + // Table rows
+        '<"row mt-2"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"p>>', // Pagination & info
+    buttons: [
+        {
+            extend: "excelHtml5",
+            text: "Excel",
+            className: "btn btn-success btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
+            },
+        },
+        {
+            extend: "pdfHtml5",
+            text: "PDF",
+            className: "btn btn-danger btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
+            },
+        },
+    ],
 });
 
-function updateWhitelistStatus(status, id) {
+serchId.keyup(function () {
+    approveTable.draw();
+});
+
+$(document).on("click", ".transferredBtn,.cancelledBtn", function () {
+    let id = $(this).attr("data-id");
+    let status = $(this).attr("data-status");
+    updateBalanceRequestStatus(status, id);
+});
+
+function updateBalanceRequestStatus(status, id) {
     Swal.fire({
         html: `Are you want to ${status} this?`,
         icon: "info",
@@ -211,7 +312,7 @@ function updateWhitelistStatus(status, id) {
                 setCSRFToken();
                 $.ajax({
                     type: "PUT",
-                    url: BASE_URL + "/all/whitelist/request/update-status/" + id,
+                    url: BASE_URL + "/all/balance/request/update-status/" + id,
                     data: {status},
                     dataType: "JSON",
                     success: function (response) {

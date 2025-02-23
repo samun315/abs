@@ -14,8 +14,6 @@ use Yajra\DataTables\DataTables;
 
 class BalanceRequestService
 {
-
-
     public function getRequestInfo(Request $request): JsonResponse|Model|Builder
     {
         $searchKeyword = $request->input('search');

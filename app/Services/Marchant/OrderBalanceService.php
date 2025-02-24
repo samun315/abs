@@ -34,7 +34,7 @@ class OrderBalanceService
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
 
-                $showBtn = '<button type="button" data-id="' . $row->id . '" class="btn btn-success btn-sm ms-lg-2">Show</button>';
+                $showBtn = '<button data-id="' . $row->id . '" class="btn btn-success btn-sm ms-lg-2 showOrderBtn" data-bs-toggle="modal" data-bs-target="#showModal">Show</button>';
 
                 return $showBtn;
             })
@@ -44,22 +44,29 @@ class OrderBalanceService
 
     public function gatewayInfo(int $gatewayId): PaymentGateway
     {
-        return PaymentGateway::query()->where('id',$gatewayId)->first();
+        return PaymentGateway::query()->where('id', $gatewayId)->first();
     }
 
-    public function storeOrderBalance(OrderBalanceRequest $request):Model
+    public function getOrderDetails(int $orderId): OrderBalance
+    {
+        return OrderBalance::query()
+            ->leftJoin('payment_gateways', 'orders.payment_gateway_id', '=', 'payment_gateways.id')
+            ->select('orders.*', 'payment_gateways.gateway_name','payment_gateways.rate','payment_gateways.currency_code')
+            ->where('orders.id', $orderId)->first();
+    }
+
+    public function storeOrderBalance(OrderBalanceRequest $request): Model
     {
         try {
             $orderData = $request->fields();
             $orderData['attachment_url'] = $this->uploadMedia($request, 'attachment_url', 'order');
-            $orderData['order_by'] = loggedInUserId();
+            $orderData['ordered_by'] = loggedInUserId();
 
             $order = OrderBalance::query()->create($orderData);
-    
+
             return $order;
         } catch (Exception $exception) {
             throw $exception;
         }
-
     }
 }

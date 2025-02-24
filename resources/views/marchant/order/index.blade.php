@@ -1,11 +1,19 @@
 @extends('master')
 @section('title', 'Order List')
+@section('page_css')
+    <style nonce="{{ $cspNonce }}">
+        #uploaded_photo {
+            width: 100%;
+            max-height: 250px;
+        }
+    </style>
+@endsection
 @section('content')
     <x-toolbar-component title="Order List" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
         ['label' => 'Order Management', 'url' => 'javascript:void(0)'],
         ['label' => 'Order List', 'active' => true],
-    ]" actionUrl="{{route('marchant.order.balance.create')}}"
+    ]" actionUrl="{{ route('marchant.order.balance.create') }}"
         actionIcon="fas fa-plus-circle" actionLabel="Add Balance" />
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -64,6 +72,10 @@
                 <!--end::Card body-->
             </div>
             <!--end::Card-->
+
+            {{-- start:: show order modal --}}
+            @include('marchant.order.modal.showOrderModal')
+            {{-- end:: show order modal --}}
         </div>
         <!--end::Container-->
     </div>

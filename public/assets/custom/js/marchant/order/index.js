@@ -204,6 +204,56 @@ search.keyup(function () {
     table.draw();
 });
 
+$(document).on("click", ".showOrderBtn", function () {
+    let id = $(this).attr("data-id");
+    getOrderBalanceDetails(id);
+});
+
+function getOrderBalanceDetails(id){
+    $.ajax({
+        type: "GET",
+        url: BASE_URL + "/order/balance/details/" + id,
+        dataType: "JSON",
+        success: function (response) {
+            if (response?.success && response?.statusCode === 200) {
+ 
+               let orderDetails  = response.data;
+                
+                let amount = "";
+                let total_diamond = "";
+                $(".gateway_name_column").html(orderDetails?.gateway_name);
+                $(".gateway_details").html(orderDetails?.details);
+                $(".kt_currency").html(orderDetails?.currency_code);
+                $(".rate-box").html(orderDetails?.rate);
+
+                let orderStatus = '';
+
+                if (orderDetails?.status == "Pending") {
+                    orderStatus = "badge badge-warning";
+                } else if (orderDetails?.status == "Paid") {
+                    orderStatus = "badge badge-success";
+                } else {
+                    orderStatus = "badge badge-danger";
+                }
+                let kt_status = `<span class="${orderStatus}">${orderDetails?.status}</span>`;
+                              
+                $(".kt_status").html(kt_status);
+                $(".kt_date_time").html(formatDate(orderDetails?.created_at));
+                $(".bd_amount").html(orderDetails?.amount);
+                $(".diamond_amount").html(orderDetails?.diamond_quantity);
+                
+                // $("#uploaded_photo").html();
+                document.getElementById("uploaded_photo").src = window.location.origin+"/uploads/order/"+orderDetails?.attachment_url;
+
+            } 
+        },
+        error: function (data) {
+            toastr.error(
+                data?.message || "An unexpected error occurred."
+            );
+        },
+    });
+}
 
 $(document).on("click", ".transferredBtn,.cancelledBtn", function () {
     let id = $(this).attr("data-id");

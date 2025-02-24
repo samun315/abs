@@ -1,74 +1,9 @@
 @extends('master')
 @section('title', 'Add Balance')
-<style nonce="{{ $cspNonce }}">
-    .payment-option {
-        display: block;
-        cursor: pointer;
-        margin-bottom: 10px;
-    }
-
-    .payment-box {
-        background: #eee;
-        padding: 15px;
-        border-radius: 5px;
-        text-align: left;
-        font-weight: bold;
-        transition: 0.3s;
-        border: 2px solid transparent;
-        color: #007bff;
-        display: flex;
-        justify-content: space-between;
-        /* Ensures checkmark is at the end */
-        align-items: center;
-        position: relative;
-        width: 100%;
-    }
-
-    input:checked+.payment-box {
-        background: #eee;
-        border-color: #007bff;
-    }
-
-    .checkmark {
-        display: none;
-        font-size: 18px;
-        color: rgb(185, 185, 207);
-        font-weight: bold;
-    }
-
-
-    input:checked+.payment-box .checkmark {
-        display: inline-block;
-    }
-
-
-    .payment-text {
-        flex-grow: 1;
-        /* Ensures the text takes all available space */
-    }
-
-    input:checked+.payment-box .checkmark {
-        display: inline-block;
-    }
-
-    .table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    .table th,
-    .table td {
-        border: 1px solid #ddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    #preview {
-        display: none;
-        width: 100%;
-        max-height: 250px;
-    }
-</style>
+@section('page_css')
+    <link href="{{ asset('assets/custom/css/order/style.css') }}"
+        {{ Sri::html('assets/custom/css/order/style.css') }} rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
     <x-toolbar-component title="Add Balance" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
@@ -136,7 +71,7 @@
                             </div>
                             <div class="col-md-7 row detailsDiv">
                                 <div class="col-md-12 mt-9">
-                                    <table class="table border border-2">
+                                    <table class="table border border-2 table-row-dashed table-row-gray-300">
                                         <tr class="highlight text-white">
                                             <th class="ps-2">FIELD</th>
                                             <th>INFORMATION</th>
@@ -170,10 +105,10 @@
                                         <tr class="highlight text-white">
                                             <th class="ps-2" colspan="2">Gateway Details</th>
                                         </tr>
-                                        <tr>
+                                        <tr class="border-0">
                                             <th class="ps-2" colspan="2"><strong class="gateway_details"></strong></th>
                                         </tr>
-                                        <tr>
+                                        <tr class="border-0">
                                             <td class="ps-2" colspan="2"><strong>Uploaded Attachment:</strong></td>
                                         </tr>
                                         <tr>

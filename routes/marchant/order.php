@@ -9,6 +9,8 @@ Route::group(['prefix' => 'order/balance'], function () {
     Route::get('/create', [OrderBalanceController::class, 'create'])->name('create');
     Route::get('/gateway-info/{gateway_id}', [OrderBalanceController::class, 'gatewayInfo'])->name('gatewayInfo');
     Route::post('/store', [OrderBalanceController::class, 'store'])->name('store');
+    Route::get('/details/{order_id}', [OrderBalanceController::class, 'getOrderDetails'])->name('getOrderDetails');
+    
 });
 
 

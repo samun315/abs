@@ -24,20 +24,35 @@ class OrderBalanceController extends Controller
         return view('marchant.order.index');
     }
 
-    public function create():View
+    public function create(): View
     {
         $data['paymentGateways'] = PaymentGateway::query()->where('active', 'YES')->get();
-        
+
         return view('marchant.order.create', $data);
     }
 
-    public function gatewayInfo(int $gatewayId):JsonResponse
+    public function gatewayInfo(int $gatewayId): JsonResponse
     {
-        $data = $this->orderBalanceService->gatewayInfo($gatewayId);
+        try {
+            $data = $this->orderBalanceService->gatewayInfo($gatewayId);
 
-        return sendSuccessResponse(200, '', 'gatewayInfo', $data);
-    
+            return sendSuccessResponse(200, '', 'gatewayInfo', $data);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
+
+    public function getOrderDetails(int $orderId): JsonResponse
+    {
+        try {
+            $data = $this->orderBalanceService->getOrderDetails($orderId);
+// dd($data);
+            return sendSuccessResponse(200, '', 'data', $data);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public function store(OrderBalanceRequest $request): RedirectResponse
     {
         try {

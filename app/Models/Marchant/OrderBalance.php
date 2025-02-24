@@ -15,7 +15,7 @@ class OrderBalance extends Model
 
     protected $fillable = [
         'id',
-        'odered_by',
+        'order_by',
         'payment_gateway_id',
         'amount',
         'diamond_quantity',

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Marchant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Marchant\OrderBalanceRequest;
 use App\Models\Payment\PaymentGateway;
 use App\Services\Marchant\OrderBalanceService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -36,20 +38,18 @@ class OrderBalanceController extends Controller
         return sendSuccessResponse(200, '', 'gatewayInfo', $data);
     
     }
-    public function store(BalanceRequest $request): JsonResponse
+    public function store(OrderBalanceRequest $request): RedirectResponse
     {
         try {
 
-            $storeUserInfo = $this->balanceRequestService->storeBalanceRequest($request->fields());
+            $storeUserInfo = $this->orderBalanceService->storeOrderBalance($request);
 
-            return sendSuccessResponse(
-                200,
-                'Balance Request Created successfully.',
-                'data',
-                $storeUserInfo
+            return to_route('marchant.order.balance.index')->with(
+                'success',
+                'Order Balance Stored successfully.'
             );
         } catch (Exception $exception) {
-            return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
+            return back()->with('error', $exception->getMessage());
         }
     }
 }

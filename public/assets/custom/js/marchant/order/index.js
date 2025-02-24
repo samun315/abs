@@ -19,17 +19,21 @@ $(".payment_gateway").on("change", function () {
                 let amount = "";
                 let total_diamond = "";
                 $(".gateway_name_column").html(gatewayInfo?.gateway_name);
+                $(".gateway_details").html(gatewayInfo?.details);
                 $(".kt_currency").html(gatewayInfo?.currency_code);
                 $(".rate-box").html(gatewayInfo?.rate);
+                $("#kt_rate").val(gatewayInfo?.rate);
 
                 if ($("#kt_amount").val() == "") {
                     amount = 0;
-                    total_diamond = (amount / gatewayInfo?.rate).toFixed();
+                    total_diamond = (amount / gatewayInfo?.rate).toFixed(2);
                 } else {
                     amount = $("#kt_amount").val();
-                    total_diamond = (amount / gatewayInfo?.rate).toFixed();
+                    total_diamond = (amount / gatewayInfo?.rate).toFixed(2);
                 }
                 $("#kt_diamond_quantity").val(total_diamond);
+                $(".bd_amount").html(amount);
+                $(".diamond_amount").html(total_diamond);
 
                 $(".detailsDiv").show();
             } else {
@@ -54,20 +58,28 @@ $(".payment_gateway").on("change", function () {
     });
 });
 
-let validate = selectedForm.validate({
-    rules: {
-        name: "required",
-    },
-    onsubmit: true,
+$("#kt_amount").on("keyup", function () {
+    let bd_amount = $(this).val();
+    let rate = $("#kt_rate").val();
+    let diamond_amount = (bd_amount / rate).toFixed(2);
+
+    $(".bd_amount").html(bd_amount);
+    $(".diamond_amount").html(diamond_amount);
+    $("#kt_diamond_quantity").val(diamond_amount);
 });
 
-$(".formReset").on("click", function () {
-    formReset();
+$("#kt_attachment").on("change", function (event) {
+    let file = event.target.files[0]; // Get the selected file
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $("#preview").attr("src", e.target.result).show(); // Set image source and show it
+        };
+        reader.readAsDataURL(file); // Read file as Data URL
+    } else {
+        $("#preview").hide(); // Hide preview if no file selected
+    }
 });
-
-function formReset() {
-    $("#submitForm").trigger("reset");
-}
 
 const formatDate = (data) => {
     if (!data) return "";
@@ -117,10 +129,6 @@ let table = $("#kt_table_order").DataTable({
             name: "DT_RowIndex",
             orderable: false,
             searchable: false,
-        },
-        {
-            data: "amount",
-            name: "amount",
         },
         {
             data: "amount",
@@ -196,107 +204,6 @@ search.keyup(function () {
     table.draw();
 });
 
-// APPROVE BALANCE REQUEST START
-
-let serchId = $("#search");
-
-let approveTable = $("#kt_table_approve_balance_request").DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: {
-        url: BASE_URL + "/all/balance/request",
-        data: function (d) {
-            d.search = serchId.val();
-        },
-    },
-    columns: [
-        {
-            data: "DT_RowIndex",
-            name: "DT_RowIndex",
-            orderable: false,
-            searchable: false,
-        },
-        {
-            data: "user",
-            name: "user",
-        },
-        {
-            data: "mobile_number",
-            name: "mobile_number",
-        },
-        {
-            data: "amount",
-            name: "amount",
-        },
-        {
-            data: "status",
-            render: function (data) {
-                if (!data) return "";
-
-                let status = "";
-
-                if (data == "Pending") {
-                    status = "badge badge-warning";
-                } else if (data == "Transferred") {
-                    status = "badge badge-success";
-                } else {
-                    status = "badge badge-danger";
-                }
-
-                return `<p class="${status} ">${data}</p>`;
-            },
-        },
-        {
-            data: "created_at",
-            render: formatDate,
-        },
-        {
-            data: "action",
-            name: "action",
-        },
-    ],
-    columnDefs: [
-        {
-            targets: "_all",
-            defaultContent: "",
-        },
-    ],
-    paging: true, // Enables pagination
-    pageLength: 10, // Show 5 records per page
-    lengthMenu: [10, 25, 50, 75, 100, 200], // Dropdown for selecting number of rows
-    dom:
-        '<"row"<"col-sm-2"l><"col-sm-10 d-flex justify-content-end"B>>' + // Length menu & buttons
-        '<"row"<"col-sm-12"tr>>' + // Table rows
-        '<"row mt-2"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"p>>', // Pagination & info
-    buttons: [
-        {
-            extend: "excelHtml5",
-            text: "Excel",
-            className: "btn btn-success btn-sm",
-            attr: {
-                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
-            },
-            exportOptions: {
-                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
-            },
-        },
-        {
-            extend: "pdfHtml5",
-            text: "PDF",
-            className: "btn btn-danger btn-sm",
-            attr: {
-                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
-            },
-            exportOptions: {
-                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
-            },
-        },
-    ],
-});
-
-serchId.keyup(function () {
-    approveTable.draw();
-});
 
 $(document).on("click", ".transferredBtn,.cancelledBtn", function () {
     let id = $(this).attr("data-id");

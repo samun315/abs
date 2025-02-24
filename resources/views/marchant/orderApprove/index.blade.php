@@ -1,11 +1,19 @@
 @extends('master')
-@section('title', 'All Requests WhiteList')
+@section('title', 'Order Approval List')
+@section('page_css')
+    <style nonce="{{ $cspNonce }}">
+        #uploaded_photo {
+            width: 100%;
+            max-height: 250px;
+        }
+    </style>
+@endsection
 @section('content')
-    <x-toolbar-component title="All Requests WhiteList" :breadcrumbs="[
+    <x-toolbar-component title="Order Approval List" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
         ['label' => 'Approval Management', 'url' => 'javascript:void(0)'],
-        ['label' => 'All Requests WhiteList', 'active' => true],
-    ]"/>
+        ['label' => 'Order Approval List', 'active' => true],
+    ]" />
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-fluid">
@@ -41,14 +49,16 @@
                     <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
                             <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
-                                id="kt_table_approve_whitelist">
+                                id="kt_table_order_approval">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-muted text-uppercase fw-bolder fs-7 gs-0">
                                         <th>#</th>
                                         <th>User</th>
-                                        <th>Phone Number</th>
+                                        <th>Gateway</th>
+                                        <th>Amount</th>
+                                        <th>Amount Diamond</th>
                                         <th>Status</th>
                                         <th>Date</th>
                                         <th>Action</th>
@@ -64,6 +74,10 @@
                 <!--end::Card body-->
             </div>
             <!--end::Card-->
+            
+            {{-- start:: show order modal --}}
+            @include('marchant.orderApprove.modal.showOrderModal')
+            {{-- end:: show order modal --}}
         </div>
         <!--end::Container-->
     </div>
@@ -72,8 +86,8 @@
 @section('page_script')
 
     <!-- begin::Page Custom Stylesheets(used by this page) -->
-    <script src="{{ asset('assets/custom/js/marchant/requestWhitelist/index.js') }}"
-        {{ Sri::html('assets/custom/js/marchant/requestWhitelist/index.js') }}></script>
+    <script src="{{ asset('assets/custom/js/marchant/order/index.js') }}"
+        {{ Sri::html('assets/custom/js/marchant/order/index.js') }}></script>
     <!--end::Page Custom Stylesheets(used by this page)-->
 
 @endsection

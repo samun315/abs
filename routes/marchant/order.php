@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Marchant\OrderBalanceApproveController;
 use App\Http\Controllers\Marchant\OrderBalanceController;
 use Illuminate\Support\Facades\Route;
-// marchant.balance.request.index
+// marchant.order.balance.index
 
 Route::group(['prefix' => 'order/balance'], function () {
     Route::get('/', [OrderBalanceController::class, 'index'])->name('index');
@@ -13,8 +14,8 @@ Route::group(['prefix' => 'order/balance'], function () {
     
 });
 
-
-// Route::group(['prefix' => 'all/balance/request', 'as' => 'approve.'], function () {
-//     Route::get('/', [BalanceRequestApproveController::class, 'index'])->name('index');
-//     Route::put('/update-status/{id}', [BalanceRequestApproveController::class, 'updateStatus'])->name('updateStatus');
-// });
+// marchant.order.balance.approve.index
+Route::group(['prefix' => 'all/order/balance', 'as' => 'approve.'], function () {
+    Route::get('/', [OrderBalanceApproveController::class, 'index'])->name('index');
+    Route::put('/update-status/{id}', [OrderBalanceApproveController::class, 'updateStatus'])->name('updateStatus');
+});

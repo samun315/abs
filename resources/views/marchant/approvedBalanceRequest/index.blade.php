@@ -3,7 +3,7 @@
 @section('content')
     <x-toolbar-component title="All Balance Request list" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('dashboard')],
-        ['label' => 'Order Management', 'url' => 'javascript:void(0)'],
+        ['label' => 'Approval Management', 'url' => 'javascript:void(0)'],
         ['label' => 'All Balance Request list', 'active' => true],
     ]"/>
     <div class="post d-flex flex-column-fluid" id="kt_post">

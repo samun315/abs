@@ -49,7 +49,6 @@ class BalanceRequestApproveService
                     $cancelBtn = '<button type="button" data-id="' . $row->id . '" data-status="Cancelled" class="btn btn-danger btn-sm ms-lg-2 cancelledBtn">Cancel</button>';
                 }
 
-
                 $button = '<div class="btn-group" role="group" aria-label="Basic example">
                             ' . $transferBtn . '
                             ' . $cancelBtn . '

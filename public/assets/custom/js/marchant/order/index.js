@@ -209,16 +209,15 @@ $(document).on("click", ".showOrderBtn", function () {
     getOrderBalanceDetails(id);
 });
 
-function getOrderBalanceDetails(id){
+function getOrderBalanceDetails(id) {
     $.ajax({
         type: "GET",
         url: BASE_URL + "/order/balance/details/" + id,
         dataType: "JSON",
         success: function (response) {
             if (response?.success && response?.statusCode === 200) {
- 
-               let orderDetails  = response.data;
-                
+                let orderDetails = response.data;
+
                 let amount = "";
                 let total_diamond = "";
                 $(".gateway_name_column").html(orderDetails?.gateway_name);
@@ -226,7 +225,7 @@ function getOrderBalanceDetails(id){
                 $(".kt_currency").html(orderDetails?.currency_code);
                 $(".rate-box").html(orderDetails?.rate);
 
-                let orderStatus = '';
+                let orderStatus = "";
 
                 if (orderDetails?.status == "Pending") {
                     orderStatus = "badge badge-warning";
@@ -236,32 +235,148 @@ function getOrderBalanceDetails(id){
                     orderStatus = "badge badge-danger";
                 }
                 let kt_status = `<span class="${orderStatus}">${orderDetails?.status}</span>`;
-                              
+
                 $(".kt_status").html(kt_status);
-                $(".kt_date_time").html(formatDate(orderDetails?.created_at));
+                $(".kt_date_time").html(formatDate(orderDetails?.updated_at));
                 $(".bd_amount").html(orderDetails?.amount);
                 $(".diamond_amount").html(orderDetails?.diamond_quantity);
-                
-                // $("#uploaded_photo").html();
-                document.getElementById("uploaded_photo").src = window.location.origin+"/uploads/order/"+orderDetails?.attachment_url;
 
-            } 
+                // $("#uploaded_photo").html();
+                document.getElementById("uploaded_photo").src =
+                    window.location.origin +
+                    "/uploads/order/" +
+                    orderDetails?.attachment_url;
+            }
         },
         error: function (data) {
-            toastr.error(
-                data?.message || "An unexpected error occurred."
-            );
+            toastr.error(data?.message || "An unexpected error occurred.");
         },
     });
 }
 
-$(document).on("click", ".transferredBtn,.cancelledBtn", function () {
-    let id = $(this).attr("data-id");
-    let status = $(this).attr("data-status");
-    updateBalanceRequestStatus(status, id);
+// ORDER BALANCE APPROVAL START
+
+let serchId = $("#search");
+
+let paidTable = $("#kt_table_order_approval").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: BASE_URL + "/all/order/balance",
+        data: function (d) {
+            d.search = serchId.val();
+        },
+    },
+    columns: [
+        {
+            data: "DT_RowIndex",
+            name: "DT_RowIndex",
+            orderable: false,
+            searchable: false,
+        },
+        {
+            data: "user",
+            name: "user",
+        },
+        {
+            data: "gateway_name",
+            name: "gateway_name",
+        },
+        {
+            data: "amount",
+            render: function (data, type, row) {
+                if (!data) return "";
+
+                return `TK ${data} ${row.currency_code}`;
+            },
+        },
+        {
+            data: "diamond_quantity",
+            render: function (data, type, row) {
+                if (!data) return "";
+
+                return `💎 ${data} <br/>(1 IMO Diamond = ${row.rate} ${row.currency_code} 💎)`;
+            },
+        },
+        {
+            data: "status",
+            render: function (data) {
+                if (!data) return "";
+
+                let status = "";
+
+                if (data == "Pending") {
+                    status = "badge badge-warning";
+                } else if (data == "Paid") {
+                    status = "badge badge-success";
+                } else {
+                    status = "badge badge-danger";
+                }
+
+                return `<p class="${status} ">${data}</p>`;
+            },
+        },
+        {
+            data: "created_at",
+            render: formatDate,
+        },
+        {
+            data: "action",
+            name: "action",
+        },
+    ],
+    columnDefs: [
+        {
+            targets: "_all",
+            defaultContent: "",
+        },
+    ],
+    paging: true, // Enables pagination
+    pageLength: 10, // Show 5 records per page
+    lengthMenu: [10, 25, 50, 75, 100, 200], // Dropdown for selecting number of rows
+    dom:
+        '<"row"<"col-sm-2"l><"col-sm-10 d-flex justify-content-end"B>>' + // Length menu & buttons
+        '<"row"<"col-sm-12"tr>>' + // Table rows
+        '<"row mt-2"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"p>>', // Pagination & info
+    buttons: [
+        {
+            extend: "excelHtml5",
+            text: "Excel",
+            className: "btn btn-success btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
+            },
+        },
+        {
+            extend: "pdfHtml5",
+            text: "PDF",
+            className: "btn btn-danger btn-sm",
+            attr: {
+                style: "margin-top: 25px;padding: 0 10px; font-size: 12px; line-height: 1; height: 30px;",
+            },
+            exportOptions: {
+                columns: ":not(:first-child):not(:last-child)", // Exclude the first column (DT_RowIndex)
+            },
+        },
+    ],
 });
 
-function updateBalanceRequestStatus(status, id) {
+serchId.keyup(function () {
+    paidTable.draw();
+});
+
+$(document).on("click", ".paidBtn,.cancelledBtn", function () {
+    let id = $(this).attr("data-id");
+    let status = $(this).attr("data-status");
+    let user_id = $(this).attr("data-user");
+    let order_amount = $(this).attr("data-amount");
+    updateOrderBalanceRequestStatus(id, user_id, status, order_amount);
+});
+
+function updateOrderBalanceRequestStatus(id, user_id, status, order_amount ) {
     Swal.fire({
         html: `Are you want to ${status} this?`,
         icon: "info",
@@ -279,13 +394,13 @@ function updateBalanceRequestStatus(status, id) {
                 setCSRFToken();
                 $.ajax({
                     type: "PUT",
-                    url: BASE_URL + "/all/balance/request/update-status/" + id,
-                    data: { status },
+                    url: BASE_URL + "/all/order/balance/update-status/" + id,
+                    data: { status, user_id, order_amount },
                     dataType: "JSON",
                     success: function (response) {
                         if (response?.statusCode === 200) {
                             toastr.success(response?.message, "Success!");
-                            approveTable.draw();
+                            paidTable.draw();
                         }
                     },
                     error: function (data) {

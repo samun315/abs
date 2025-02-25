@@ -4,128 +4,137 @@
 @section('content')
 
     <!--begin::Toolbar  -->
-    <x-toolbar-component
-        title="Dashboard"
-        :breadcrumbs="[
-        ['label' => 'Home', 'url' => route('dashboard')],
-        ['label' => 'Dashboard', 'active' => true]]"
-    />
+    <x-toolbar-component title="Dashboard" :breadcrumbs="[['label' => 'Home', 'url' => route('dashboard')], ['label' => 'Dashboard', 'active' => true]]" />
 
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-fluid">
 
             <div class="row g-5 g-xl-8">
-                <div class="col-xl-3">
-                    <!--begin::Statistics Widget 5-->
-                    <a href="javascript:void(0)" class="card bg-danger hoverable card-xl-stretch mb-xl-8">
-                        <!--begin::Body-->
-                        <div class="card-body">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm002.svg-->
-                            <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path
-                                        d="M21 10H13V11C13 11.6 12.6 12 12 12C11.4 12 11 11.6 11 11V10H3C2.4 10 2 10.4 2 11V13H22V11C22 10.4 21.6 10 21 10Z"
-                                        fill="black"></path>
-                                    <path opacity="0.3"
-                                        d="M12 12C11.4 12 11 11.6 11 11V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V11C13 11.6 12.6 12 12 12Z"
-                                        fill="black"></path>
-                                    <path opacity="0.3"
-                                        d="M18.1 21H5.9C5.4 21 4.9 20.6 4.8 20.1L3 13H21L19.2 20.1C19.1 20.6 18.6 21 18.1 21ZM13 18V15C13 14.4 12.6 14 12 14C11.4 14 11 14.4 11 15V18C11 18.6 11.4 19 12 19C12.6 19 13 18.6 13 18ZM17 18V15C17 14.4 16.6 14 16 14C15.4 14 15 14.4 15 15V18C15 18.6 15.4 19 16 19C16.6 19 17 18.6 17 18ZM9 18V15C9 14.4 8.6 14 8 14C7.4 14 7 14.4 7 15V18C7 18.6 7.4 19 8 19C8.6 19 9 18.6 9 18Z"
-                                        fill="black"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Order</div>
-                            <div class="fw-bold text-white">0</div>
-                        </div>
-                        <!--end::Body-->
-                    </a>
-                    <!--end::Statistics Widget 5-->
-                </div>
                 @can('marchant.balance.request.approve.index')
-                <div class="col-xl-3">
-                    <!--begin::Statistics Widget 5-->
-                    <a href="javascript:void(0)" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
-                        <!--begin::Body-->
-                        <div class="card-body">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm008.svg-->
-                            <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path opacity="0.3"
-                                        d="M18 21.6C16.3 21.6 15 20.3 15 18.6V2.50001C15 2.20001 14.6 1.99996 14.3 2.19996L13 3.59999L11.7 2.3C11.3 1.9 10.7 1.9 10.3 2.3L9 3.59999L7.70001 2.3C7.30001 1.9 6.69999 1.9 6.29999 2.3L5 3.59999L3.70001 2.3C3.50001 2.1 3 2.20001 3 3.50001V18.6C3 20.3 4.3 21.6 6 21.6H18Z"
-                                        fill="black"></path>
-                                    <path
-                                        d="M12 12.6H11C10.4 12.6 10 12.2 10 11.6C10 11 10.4 10.6 11 10.6H12C12.6 10.6 13 11 13 11.6C13 12.2 12.6 12.6 12 12.6ZM9 11.6C9 11 8.6 10.6 8 10.6H6C5.4 10.6 5 11 5 11.6C5 12.2 5.4 12.6 6 12.6H8C8.6 12.6 9 12.2 9 11.6ZM9 7.59998C9 6.99998 8.6 6.59998 8 6.59998H6C5.4 6.59998 5 6.99998 5 7.59998C5 8.19998 5.4 8.59998 6 8.59998H8C8.6 8.59998 9 8.19998 9 7.59998ZM13 7.59998C13 6.99998 12.6 6.59998 12 6.59998H11C10.4 6.59998 10 6.99998 10 7.59998C10 8.19998 10.4 8.59998 11 8.59998H12C12.6 8.59998 13 8.19998 13 7.59998ZM13 15.6C13 15 12.6 14.6 12 14.6H10C9.4 14.6 9 15 9 15.6C9 16.2 9.4 16.6 10 16.6H12C12.6 16.6 13 16.2 13 15.6Z"
-                                        fill="black"></path>
-                                    <path
-                                        d="M15 18.6C15 20.3 16.3 21.6 18 21.6C19.7 21.6 21 20.3 21 18.6V12.5C21 12.2 20.6 12 20.3 12.2L19 13.6L17.7 12.3C17.3 11.9 16.7 11.9 16.3 12.3L15 13.6V18.6Z"
-                                        fill="black"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Request</div>
-                            <div class="fw-bold text-white">0</div>
-                        </div>
-                        <!--end::Body-->
-                    </a>
-                    <!--end::Statistics Widget 5-->
-                </div>
+                    <div class="col-xl-3">
+                        <!--begin::Statistics Widget 5-->
+                        <a href="javascript:void(0)" class="card bg-danger hoverable card-xl-stretch mb-xl-8">
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm002.svg-->
+                                <span
+                                    class="svg-icon svg-icon-white svg-icon-3x ms-n1"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Shopping/Cart1.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <title>Stockholm-icons / Shopping / Cart1</title>
+                                        <desc>Created with Sketch.</desc>
+                                        <defs />
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path
+                                                d="M18.1446364,11.84388 L17.4471627,16.0287218 C17.4463569,16.0335568 17.4455155,16.0383857 17.4446387,16.0432083 C17.345843,16.5865846 16.8252597,16.9469884 16.2818833,16.8481927 L4.91303792,14.7811299 C4.53842737,14.7130189 4.23500006,14.4380834 4.13039941,14.0719812 L2.30560137,7.68518803 C2.28007524,7.59584656 2.26712532,7.50338343 2.26712532,7.4104669 C2.26712532,6.85818215 2.71484057,6.4104669 3.26712532,6.4104669 L16.9929851,6.4104669 L17.606173,3.78251876 C17.7307772,3.24850086 18.2068633,2.87071314 18.7552257,2.87071314 L20.8200821,2.87071314 C21.4717328,2.87071314 22,3.39898039 22,4.05063106 C22,4.70228173 21.4717328,5.23054898 20.8200821,5.23054898 L19.6915238,5.23054898 L18.1446364,11.84388 Z"
+                                                fill="#000000" opacity="0.3" />
+                                            <path
+                                                d="M6.5,21 C5.67157288,21 5,20.3284271 5,19.5 C5,18.6715729 5.67157288,18 6.5,18 C7.32842712,18 8,18.6715729 8,19.5 C8,20.3284271 7.32842712,21 6.5,21 Z M15.5,21 C14.6715729,21 14,20.3284271 14,19.5 C14,18.6715729 14.6715729,18 15.5,18 C16.3284271,18 17,18.6715729 17,19.5 C17,20.3284271 16.3284271,21 15.5,21 Z"
+                                                fill="#000000" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
+                                <!--end::Svg Icon-->
+                                <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Order</div>
+                                <div class="fw-bold text-white">{{ $pending_order }}</div>
+                            </div>
+                            <!--end::Body-->
+                        </a>
+                        <!--end::Statistics Widget 5-->
+                    </div>
                 @endcan
-                <div class="col-xl-3">
-                    <!--begin::Statistics Widget 5-->
-                    <a href="javascript:void(0)"
-                        class="card bg-success hoverable card-xl-stretch mb-5 mb-xl-8">
-                        <!--begin::Body-->
-                        <div class="card-body">
-                            <!--begin::Svg Icon | path: icons/duotune/graphs/gra005.svg-->
-                            <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path opacity="0.3"
-                                        d="M14 12V21H10V12C10 11.4 10.4 11 11 11H13C13.6 11 14 11.4 14 12ZM7 2H5C4.4 2 4 2.4 4 3V21H8V3C8 2.4 7.6 2 7 2Z"
-                                        fill="black"></path>
-                                    <path
-                                        d="M21 20H20V16C20 15.4 19.6 15 19 15H17C16.4 15 16 15.4 16 16V20H3C2.4 20 2 20.4 2 21C2 21.6 2.4 22 3 22H21C21.6 22 22 21.6 22 21C22 20.4 21.6 20 21 20Z"
-                                        fill="black"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Transfer</div>
-                            <div class="fw-bold text-white">0</div>
-                        </div>
-                        <!--end::Body-->
-                    </a>
-                    <!--end::Statistics Widget 5-->
-                </div>
-                <div class="col-xl-3">
-                    <!--begin::Statistics Widget 5-->
-                    <a href="javascript:void(0)"
-                        class="card bg-success hoverable card-xl-stretch mb-5 mb-xl-8">
-                        <!--begin::Body-->
-                        <div class="card-body">
-                            <!--begin::Svg Icon | path: icons/duotune/graphs/gra005.svg-->
-                            <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path opacity="0.3"
-                                        d="M14 12V21H10V12C10 11.4 10.4 11 11 11H13C13.6 11 14 11.4 14 12ZM7 2H5C4.4 2 4 2.4 4 3V21H8V3C8 2.4 7.6 2 7 2Z"
-                                        fill="black"></path>
-                                    <path
-                                        d="M21 20H20V16C20 15.4 19.6 15 19 15H17C16.4 15 16 15.4 16 16V20H3C2.4 20 2 20.4 2 21C2 21.6 2.4 22 3 22H21C21.6 22 22 21.6 22 21C22 20.4 21.6 20 21 20Z"
-                                        fill="black"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Transfer</div>
-                            <div class="fw-bold text-white">0</div>
-                        </div>
-                        <!--end::Body-->
-                    </a>
-                    <!--end::Statistics Widget 5-->
-                </div>
+                @can('marchant.balance.request.approve.index')
+                    <div class="col-xl-3">
+                        <!--begin::Statistics Widget 5-->
+                        <a href="/marchant/all/balance/request" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm008.svg-->
+                                <span class="svg-icon svg-icon-white svg-icon-3x ms-n1"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Files/File.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <title>Stockholm-icons / Files / File</title>
+                                    <desc>Created with Sketch.</desc>
+                                    <defs/>
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24"/>
+                                        <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                        <rect fill="#000000" x="6" y="11" width="9" height="2" rx="1"/>
+                                        <rect fill="#000000" x="6" y="15" width="5" height="2" rx="1"/>
+                                    </g>
+                                </svg><!--end::Svg Icon--></span>
+                                <!--end::Svg Icon-->
+                                <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Request</div>
+                                <div class="fw-bold text-white">{{ $pending_request }}</div>
+                            </div>
+                            <!--end::Body-->
+                        </a>
+                        <!--end::Statistics Widget 5-->
+                    </div>
+                @endcan
+                @can('marchant.balance.request.approve.index')
+                    <div class="col-xl-3">
+                        <!--begin::Statistics Widget 5-->
+                        <a href="javascript:void(0)" class="card bg-success hoverable card-xl-stretch mb-5 mb-xl-8">
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <!--begin::Svg Icon | path: icons/duotune/graphs/gra005.svg-->
+                                <span
+                                    class="svg-icon svg-icon-white svg-icon-3x ms-n1"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Files/Cloud-upload.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <title>Stockholm-icons / Files / Cloud-upload</title>
+                                        <desc>Created with Sketch.</desc>
+                                        <defs />
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M5.74714567,13.0425758 C4.09410362,11.9740356 3,10.1147886 3,8 C3,4.6862915 5.6862915,2 9,2 C11.7957591,2 14.1449096,3.91215918 14.8109738,6.5 L17.25,6.5 C19.3210678,6.5 21,8.17893219 21,10.25 C21,12.3210678 19.3210678,14 17.25,14 L8.25,14 C7.28817895,14 6.41093178,13.6378962 5.74714567,13.0425758 Z"
+                                                fill="#000000" opacity="0.3" />
+                                            <path
+                                                d="M11.1288761,15.7336977 L11.1288761,17.6901712 L9.12120481,17.6901712 C8.84506244,17.6901712 8.62120481,17.9140288 8.62120481,18.1901712 L8.62120481,19.2134699 C8.62120481,19.4896123 8.84506244,19.7134699 9.12120481,19.7134699 L11.1288761,19.7134699 L11.1288761,21.6699434 C11.1288761,21.9460858 11.3527337,22.1699434 11.6288761,22.1699434 C11.7471877,22.1699434 11.8616664,22.1279896 11.951961,22.0515402 L15.4576222,19.0834174 C15.6683723,18.9049825 15.6945689,18.5894857 15.5161341,18.3787356 C15.4982803,18.3576485 15.4787093,18.3380775 15.4576222,18.3202237 L11.951961,15.3521009 C11.7412109,15.173666 11.4257142,15.1998627 11.2472793,15.4106128 C11.1708299,15.5009075 11.1288761,15.6153861 11.1288761,15.7336977 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(11.959697, 18.661508) rotate(-90.000000) translate(-11.959697, -18.661508) " />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
+                                <!--end::Svg Icon-->
+                                <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Transfer</div>
+                                <div class="fw-bold text-white">{{ $pending_transfer }}</div>
+                            </div>
+                            <!--end::Body-->
+                        </a>
+                        <!--end::Statistics Widget 5-->
+                    </div>
+                @endcan
+                @can('marchant.balance.request.approve.index')
+                    <div class="col-xl-3">
+                        <!--begin::Statistics Widget 5-->
+                        <a href="/marchant/all/whitelist/request" class="card bg-info hoverable card-xl-stretch mb-5 mb-xl-8">
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <span
+                                    class="svg-icon svg-icon-white svg-icon-3x ms-n1"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Devices/Phone.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <title>Stockholm-icons / Devices / Phone</title>
+                                        <desc>Created with Sketch.</desc>
+                                        <defs />
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path
+                                                d="M7.13888889,4 L7.13888889,19 L16.8611111,19 L16.8611111,4 L7.13888889,4 Z M7.83333333,1 L16.1666667,1 C17.5729473,1 18.25,1.98121694 18.25,3.5 L18.25,20.5 C18.25,22.0187831 17.5729473,23 16.1666667,23 L7.83333333,23 C6.42705272,23 5.75,22.0187831 5.75,20.5 L5.75,3.5 C5.75,1.98121694 6.42705272,1 7.83333333,1 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <polygon fill="#000000" opacity="0.3" points="7 4 7 19 17 19 17 4" />
+                                            <circle fill="#000000" cx="12" cy="21" r="1" />
+                                        </g>
+                                    </svg><!--end::Svg Icon--></span>
+                                <div class="text-white fw-bolder fs-2 mb-2 mt-5">Pending Whitelist</div>
+                                <div class="fw-bold text-white">{{ $pending_whitelist }}</div>
+                            </div>
+                            <!--end::Body-->
+                        </a>
+                        <!--end::Statistics Widget 5-->
+                    </div>
+                @endcan
             </div>
         </div>
         <!--end::Container-->

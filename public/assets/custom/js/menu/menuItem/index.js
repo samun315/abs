@@ -21,6 +21,7 @@ $("#openMenuItemModal").on("click", function () {
 
 function openModal() {
     $("#kt_menu_item_id").val(null);
+    $("#active").val('YES').trigger('change');
     loader(selectedForm, false);
 
     $(".menuItemTitle").html("Add Menu Item");

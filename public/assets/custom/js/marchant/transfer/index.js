@@ -18,17 +18,17 @@ $(".formReset").on("click", function () {
 
 function formReset() {
     $("#submitForm").trigger("reset");
-    $("#kt_mobile_number").val("").trigger("change");
+    $("#kt_transfer_to_user").val("").trigger("change");
 }
 
-$("#openBalanceRequestModal").on("click", function () {
+$("#openTransferBalanceModal").on("click", function () {
     openModal();
 });
 
 function openModal() {
     formReset();
     loader(selectedForm, false);
-    $("#kt_whitelist_request_id").val(null);
+    $("#kt_transfer_balance_id").val(null);
     $("#showModal").modal("show");
 }
 
@@ -46,13 +46,13 @@ selectedForm.submit(function (event) {
 
     $(".error").remove();
 
-    let balanceId = $("#kt_balance_request_id").val();
+    let transferId = $("#kt_transfer_balance_id").val();
     let url = "";
-    if (balanceId) {
-        url = BASE_URL + "/balance/request/update/" + balanceId;
+    if (transferId) {
+        url = BASE_URL + "/transfer/balance/update/" + transferId;
         formData.append("_method", "PUT");
     } else {
-        url = BASE_URL + "/balance/request/store";
+        url = BASE_URL + "/transfer/balance/store";
     }
 
     $.ajax({
@@ -100,11 +100,11 @@ const formatDate = (data) => {
     return `${day} ${month}, ${date.getFullYear()} ,${hour}:${minute} ${amPm}`;
 };
 
-let table = $("#kt_table_balance_request").DataTable({
+let table = $("#kt_table_transfer_balance").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: BASE_URL + "/balance/request",
+        url: BASE_URL + "/transfer/balance",
         data: function (d) {
             d.search = search.val();
         },
@@ -115,6 +115,14 @@ let table = $("#kt_table_balance_request").DataTable({
             name: "DT_RowIndex",
             orderable: false,
             searchable: false,
+        },
+        {
+            data: "from_user",
+            name: "from_user",
+        },
+        {
+            data: "to_user",
+            name: "to_user",
         },
         {
             data: "amount",

@@ -55,6 +55,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/marchant/order.php'));
             //End ORDER Route
 
+                //Start Transfer Route
+                Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('marchant')
+                ->name('marchant.transfer.balance.')
+                ->group(base_path('routes/marchant/transfer.php'));
+            //End Transfer Route
 
             //Start Payment Gateway Route
             Route::middleware(['web', 'preventBackHistory', 'user'])

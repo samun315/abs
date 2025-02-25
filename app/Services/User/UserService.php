@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Models\Payment\Account;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
@@ -17,9 +19,27 @@ class UserService
 
     public function storeUserInfo(array $data): User|JsonResponse
     {
-        $data['password'] =  Hash::make($data['password']);
+        DB::beginTransaction();
+        try {
 
-        return User::query()->create($data);
+            $data['password'] =  Hash::make($data['password']);
+            $user = User::query()->create($data);
+            $userId = $user->id;
+
+            $accountData = [
+                'user_id' => $userId,
+                'created_by' => $data['created_by'],
+            ];
+
+            Account::query()->create($accountData);
+
+            DB::commit();
+
+            return $user;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
     }
 
     public function getUserList(Request $request): JsonResponse

@@ -62,9 +62,9 @@
                 <!--begin::Aside-->
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
-                    <a href="javascript:void(0)" class="mb-7">
+                    {{-- <a href="javascript:void(0)" class="mb-7">
                         <img alt="Logo" src="{{ asset('assets/media/auth/white-logo.png') }}" />
-                    </a>
+                    </a> --}}
                     <!--end::Logo-->
                 </div>
                 <!--begin::Aside-->
@@ -96,7 +96,7 @@
 
                                 <!--begin::Subtitle-->
                                 <div class="text-gray-500 fw-semibold fs-6">
-                                    Sign In to Bracnet ERP
+                                    Sign In to OurAbs
                                 </div>
                                 <!--end::Subtitle--->
                             </div>

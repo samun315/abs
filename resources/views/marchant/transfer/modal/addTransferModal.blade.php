@@ -19,6 +19,7 @@
                     @csrf
 
                     <input type="text" hidden name="id" id="kt_transfer_balance_id" value="">
+                    <input type="text" hidden name="current_balance" id="kt_current_balance" value="{{$account?->current_balance}}">
 
                     <!--begin::Step 1-->
                     <div class="current" data-kt-stepper-element="content">
@@ -52,7 +53,7 @@
 
                                     <div class="col-md-12 fv-row mb-5 password">
                                         <label class="required fs-5 fw-bold mb-2">Amount</label>
-                                        <input type="number" name="amount" id="kt_amount"
+                                        <input type="number" name="amount" id="kt_amount" step=".01"
                                             class="form-control form-control-solid amount bg-gradient @error('amount') is-invalid @enderror"
                                             placeholder="Enter Amount" autocomplete="off" required />
                                         @error('amount')

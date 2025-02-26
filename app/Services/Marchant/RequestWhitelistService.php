@@ -27,8 +27,8 @@ class RequestWhitelistService
                 $q->where('mobile_number', 'like', "%$searchKeyword%")
                     ->orWhere('status', 'like', "%$searchKeyword%");
             });
-        })
-            ->select('whitelist_requests.*');
+            $query->where('created_by',loggedInUserId());
+        })->latest();
 
         return Datatables::of($query)
             ->addIndexColumn()

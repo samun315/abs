@@ -11,7 +11,7 @@ class TransferRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,26 @@ class TransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'transfer_to_user' => 'required',
+            'amount' => 'required',
         ];
+    }
+
+    public function fields(): array
+    {
+        $inputData = [];
+
+        $inputData['transfer_to_user'] = $this->input('transfer_to_user');
+        $inputData['amount'] = $this->input('amount');
+        
+        if ($this->input('id')) {
+            $inputData['updated_by'] = loggedInUserId();
+            $inputData['updated_at'] = createdAtDateConvertToDB();
+        } else {
+            $inputData['created_by'] = loggedInUserId();
+            $inputData['created_at'] = createdAtDateConvertToDB();
+        }
+
+        return $inputData;
     }
 }

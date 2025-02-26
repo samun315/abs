@@ -3,6 +3,7 @@
 namespace App\Services\Marchant;
 
 use App\Models\Marchant\Transfer;
+use App\Models\Payment\Account;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +29,7 @@ class TransferService
                         ->orWhere('tu.full_name', 'like', '%' . $searchKeyword . '%')
                         ->orWhere('tu.email', 'like', '%' . $searchKeyword . '%');
                 });
+                $query->where('balance_transfers.created_by',loggedInUserId());
             })
             ->select('balance_transfers.*', 'fu.role_id as fu_role', 'fu.full_name as fu_name', 'fu.phone as fu_phone', 'fu.email as fu_email', 'tu.role_id as tu_role', 'tu.full_name as tu_name', 'tu.phone as tu_phone', 'tu.email as tu_email')
             ->latest();
@@ -60,31 +62,22 @@ class TransferService
             ->make(true);
     }
 
-    // public function gatewayInfo(int $gatewayId): PaymentGateway
-    // {
-    //     return PaymentGateway::query()->where('id', $gatewayId)->first();
-    // }
+    public function storeTransferBalance(array $data): Transfer|JsonResponse
+    {   
+        try {
+            $data['transfer_from_user'] = $data['created_by'];
 
-    // public function getOrderDetails(int $orderId): OrderBalance
-    // {
-    //     return OrderBalance::query()
-    //         ->leftJoin('payment_gateways', 'orders.payment_gateway_id', '=', 'payment_gateways.id')
-    //         ->select('orders.*', 'payment_gateways.gateway_name', 'payment_gateways.rate', 'payment_gateways.currency_code')
-    //         ->where('orders.id', $orderId)->first();
-    // }
-
-    // public function storeOrderBalance(OrderBalanceRequest $request): Model
-    // {
-    //     try {
-    //         $orderData = $request->fields();
-    //         $orderData['attachment_url'] = $this->uploadMedia($request, 'attachment_url', 'order');
-    //         $orderData['ordered_by'] = loggedInUserId();
-
-    //         $order = OrderBalance::query()->create($orderData);
-
-    //         return $order;
-    //     } catch (Exception $exception) {
-    //         throw $exception;
-    //     }
-    // }
+            $account = Account::query()->where('user_id',$data['transfer_from_user'])->first();
+            
+            if ($account && $data['amount'] < $account->current_balance) {
+                return Transfer::create($data);
+            }
+        
+            return response()->json(['error' => 'Insufficient balance'], 400);
+        
+        } catch (Exception $exception) {
+            report($exception);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+    }
 }

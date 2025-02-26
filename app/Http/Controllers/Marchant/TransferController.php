@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Marchant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Marchant\TransferRequest;
+use App\Models\Payment\Account;
 use App\Models\User;
 use App\Services\Marchant\TransferService;
 use Exception;
@@ -22,52 +24,31 @@ class TransferController extends Controller
             return $this->transferService->getTransferBalanceInfo($request);
         }
         $userRole = Auth::user()->role_id;
-        $data['emails'] = User::query()->where('role_id', $userRole)->get();
-       
+        $userId = Auth::user()->id;
+
+        $data['emails'] = User::where('role_id', $userRole)
+        ->where('id', '!=', $userId)
+        ->get();
+    
+        $data['account'] = Account::query()->where('user_id', $userId)->first();
+
         return view('marchant.transfer.index', $data);
     }
 
-    public function create(): View
-    {
-        $data['paymentGateways'] = PaymentGateway::query()->where('active', 'YES')->get();
-
-        return view('marchant.order.create', $data);
-    }
-
-    public function gatewayInfo(int $gatewayId): JsonResponse
-    {
-        try {
-            $data = $this->orderBalanceService->gatewayInfo($gatewayId);
-
-            return sendSuccessResponse(200, '', 'gatewayInfo', $data);
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function getOrderDetails(int $orderId): JsonResponse
-    {
-        try {
-            $data = $this->orderBalanceService->getOrderDetails($orderId);
-            // dd($data);
-            return sendSuccessResponse(200, '', 'data', $data);
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function store(OrderBalanceRequest $request): RedirectResponse
+    public function store(TransferRequest $request): JsonResponse
     {
         try {
 
-            $storeUserInfo = $this->orderBalanceService->storeOrderBalance($request);
+            $storeUserInfo = $this->transferService->storeTransferBalance($request->fields());
 
-            return to_route('marchant.order.balance.index')->with(
-                'success',
-                'Order Balance Stored successfully.'
+            return sendSuccessResponse(
+                200,
+                'Transfer Balance Created successfully.',
+                'data',
+                $storeUserInfo
             );
         } catch (Exception $exception) {
-            return back()->with('error', $exception->getMessage());
+            return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
         }
     }
 }

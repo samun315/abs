@@ -26,6 +26,7 @@ class OrderBalanceService
                 $query->where(function ($q) use ($searchKeyword) {
                     $q->where('status', 'like', "%$searchKeyword%");
                 });
+                $query->where('created_by',loggedInUserId());
             })->latest();
 
         // dd( $query);

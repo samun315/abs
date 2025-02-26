@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'transfer/balance'], function () {
     Route::get('/', [TransferController::class, 'index'])->name('index');
-    Route::get('/create', [TransferController::class, 'create'])->name('create');
     Route::get('/gateway-info/{gateway_id}', [TransferController::class, 'gatewayInfo'])->name('gatewayInfo');
     Route::post('/store', [TransferController::class, 'store'])->name('store');
     Route::get('/details/{order_id}', [TransferController::class, 'getOrderDetails'])->name('getOrderDetails');

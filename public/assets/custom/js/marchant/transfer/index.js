@@ -198,11 +198,11 @@ search.keyup(function () {
 
 let serchId = $("#search");
 
-let approveTable = $("#kt_table_approve_balance_request").DataTable({
+let approveTable = $("#kt_table_approve_transfer_balance").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: BASE_URL + "/all/balance/request",
+        url: BASE_URL + "/all/transfer/balance",
         data: function (d) {
             d.search = serchId.val();
         },
@@ -215,12 +215,12 @@ let approveTable = $("#kt_table_approve_balance_request").DataTable({
             searchable: false,
         },
         {
-            data: "user",
-            name: "user",
+            data: "from_user",
+            name: "from_user",
         },
         {
-            data: "mobile_number",
-            name: "mobile_number",
+            data: "to_user",
+            name: "to_user",
         },
         {
             data: "amount",
@@ -249,9 +249,9 @@ let approveTable = $("#kt_table_approve_balance_request").DataTable({
             render: formatDate,
         },
         {
-            data: "action",
-            name: "action",
-        },
+            data:'action',
+            name:'action'
+        }
     ],
     columnDefs: [
         {
@@ -299,10 +299,10 @@ serchId.keyup(function () {
 $(document).on("click", ".transferredBtn,.cancelledBtn", function () {
     let id = $(this).attr("data-id");
     let status = $(this).attr("data-status");
-    updateBalanceRequestStatus(status, id);
+    updateTransferBalanceStatus(status, id);
 });
 
-function updateBalanceRequestStatus(status, id) {
+function updateTransferBalanceStatus(status, id) {
     Swal.fire({
         html: `Are you want to ${status} this?`,
         icon: "info",
@@ -320,7 +320,7 @@ function updateBalanceRequestStatus(status, id) {
                 setCSRFToken();
                 $.ajax({
                     type: "PUT",
-                    url: BASE_URL + "/all/balance/request/update-status/" + id,
+                    url: BASE_URL + "/all/transfer/balance/update-status/" + id,
                     data: {status},
                     dataType: "JSON",
                     success: function (response) {
@@ -344,3 +344,13 @@ function updateBalanceRequestStatus(status, id) {
         }
     );
 }
+
+$("#kt_amount").on("keyup",function(){
+    let currentBalance = parseFloat($("#kt_current_balance").val()) || 0;
+
+    let enteredAmount = parseFloat($(this).val()) || 0;
+
+     if (enteredAmount > currentBalance) {
+        toastr.error('You have insufficient balance to your account', "Error!");
+     }
+});

@@ -24,6 +24,7 @@ class BalanceRequestService
                     $q->where('mobile_number', 'like', "%$searchKeyword%")
                         ->orWhere('status', 'like', "%$searchKeyword%");
                 });
+                $query->where('created_by',loggedInUserId());
             })->latest();
 
         // dd( $query);

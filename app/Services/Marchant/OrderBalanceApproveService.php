@@ -47,9 +47,11 @@ class OrderBalanceApproveService
                 $paidBtn = '';
                 $cancelBtn = '';
 
-                if ($row->status != 'Paid') {
-                    $paidBtn = '<button type="button" data-id="' . $row->id . '" data-user ="' . $row->ordered_by . '" data-amount="' . $row->diamond_quantity . '" data-status="Paid" class="btn btn-warning btn-sm ms-lg-2 paidBtn">Paid</button>';
+                if ($row->status == 'Paid' || $row->status == 'Cancelled') {
+                    $paidBtn = '';
+                    $cancelBtn = '';
                 } else {
+                    $paidBtn = '<button type="button" data-id="' . $row->id . '" data-user ="' . $row->ordered_by . '" data-amount="' . $row->diamond_quantity . '" data-status="Paid" class="btn btn-warning btn-sm ms-lg-2 paidBtn">Paid</button>';
                     $cancelBtn = '<button type="button" data-id="' . $row->id . '" data-user ="' . $row->ordered_by . '" data-amount="' . $row->diamond_quantity . '" data-status="Cancelled" class="btn btn-danger btn-sm ms-lg-2 cancelledBtn">Cancel</button>';
                 }
 

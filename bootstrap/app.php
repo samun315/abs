@@ -55,8 +55,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/marchant/order.php'));
             //End ORDER Route
 
-                //Start Transfer Route
-                Route::middleware(['web', 'preventBackHistory', 'user'])
+            //Start Transfer Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
                 ->prefix('marchant')
                 ->name('marchant.transfer.balance.')
                 ->group(base_path('routes/marchant/transfer.php'));
@@ -68,6 +68,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('payment.manual.')
                 ->group(base_path('routes/payment/paymentGateway.php'));
             //End Payment Gateway Route
+
+            //Start Balance adjust Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('payment')
+                ->name('payment.adjust.balance.')
+                ->group(base_path('routes/payment/adjustBalance.php'));
+            //End Balance adjust Route
 
             //****Start Api Route******//
             Route::middleware(['api'])

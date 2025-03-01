@@ -920,9 +920,9 @@
                     <!--begin::Menu wrapper-->
                     <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                         data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                        @if (getLoggedInUserInfo('logged_session_data.user_image'))
+                        @if (getLoggedInUserInfo('logged_session_data.profile_img'))
                             <img alt="Logo"
-                                src="{{ asset('uploads/employee/profile/' . getLoggedInUserInfo('logged_session_data.user_image')) }}" />
+                                src="{{ asset('uploads/user/profile/' . getLoggedInUserInfo('logged_session_data.profile_img')) }}" />
                         @else
                             <img src="{{ asset('assets/media/avatars/300-1.jpg') }}" alt="user" />
                         @endif
@@ -935,9 +935,9 @@
                             <div class="menu-content d-flex align-items-center px-3">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-50px me-5">
-                                    @if (getLoggedInUserInfo('logged_session_data.user_image'))
+                                    @if (getLoggedInUserInfo('logged_session_data.profile_img'))
                                         <img alt="Logo"
-                                            src="{{ asset('uploads/employee/profile/' . getLoggedInUserInfo('logged_session_data.user_image')) }}" />
+                                            src="{{ asset('uploads/user/profile/' . getLoggedInUserInfo('logged_session_data.profile_img')) }}" />
                                     @else
                                         <img alt="Logo" src="{{ asset('assets/media/avatars/300-1.jpg') }}" />
                                     @endif
@@ -946,7 +946,7 @@
                                 <!--begin::Username-->
                                 <div class="d-flex flex-column">
                                     <div class="fw-bolder d-flex align-items-center fs-5">
-                                        {{ getLoggedInUserInfo('logged_session_data.name') }}
+                                        {{ getLoggedInUserInfo('logged_session_data.full_name') }}
                                     </div>
                                     <a href="javascript:void(0)"
                                         class="fw-bold text-muted text-hover-primary fs-7 text-break">{{ getLoggedInUserInfo('logged_session_data.email') }}</a>
@@ -960,7 +960,7 @@
                         <!--end::Menu separator-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
-                            <a href="javascript:void(0)" class="menu-link px-5">My Profile</a>
+                            <a href="{{ route('user.profile.viewProfile') }}" class="menu-link px-5">My Profile</a>
                         </div>
                         <!--end::Menu item-->
 
@@ -970,7 +970,7 @@
                         --}}
                         <!--begin::Menu item-->
                         <div class="menu-item px-5 my-1">
-                            <a href="javascript:void(0)" class="menu-link px-5">Change
+                            <a href="{{ route('user.profile.changePassword') }}" class="menu-link px-5">Change
                                 Password</a>
                         </div>
                         <!--end::Menu item-->

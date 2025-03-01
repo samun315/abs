@@ -42,12 +42,6 @@ class LoginController extends Controller
                         "profile_img" => $user->profile_img,
                     ];
 
-                    // if (!empty($user->employee)) {
-                    //     $authenticateUserInfo += [
-                    //         'user_image' => $user->employee->photo,
-                    //     ];
-                    // }
-
                     // Bind the authenticated user to Laravel's authentication system
                     auth()->login($user);
             

@@ -22,16 +22,4 @@ Route::middleware(['preventBackHistory', 'user'])->group(function () {
     //Dashboard Route
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    //User
-    Route::controller(UserController::class)->group(function () {
-        Route::get('users/index', 'index')->name('user.index');
-        Route::post('users/store', 'store')->name('user.store');
-        Route::get('users/edit/{user_id}', 'edit')->name('user.edit');
-        Route::put('users/update/{user_id}', 'update')->name('user.update');
-        Route::put('users/reset-password/{user_id}', 'resetPassword')->name('user.resetPassword');
-        //    Route::get('create', 'create')->name('user.create');
-        //    Route::get('{user_id}/edit', 'edit')->name('user.edit');
-        //    Route::put('{user_id}/update', 'update')->name('user.update');
-        //    Route::put('update-status', 'updateStatus')->name('user.update.status');
-    });
 });

@@ -13,6 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
 
+            //User Route
+            Route::middleware(['web', 'preventBackHistory', 'user'])
+                ->prefix('users')
+                ->name('user.')
+                ->group(base_path('routes/user/user.php'));
+            //End User Route
+
             //Common master Route
             Route::middleware(['web', 'preventBackHistory', 'user'])
                 ->prefix('common')

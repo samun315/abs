@@ -25,7 +25,7 @@ class LoginController extends Controller
 
             $user = User::query()->where('email', $loginRequest->input('email'))
                 // ->where('active', ActiveStatus::YES)
-                ->first(['id',  'full_name', 'email', 'role_id', 'phone', 'password']);
+                ->first(['id',  'full_name', 'email', 'role_id', 'phone', 'password','profile_img']);
 
             if (!empty($user)) {
 
@@ -39,6 +39,7 @@ class LoginController extends Controller
                         "email" => $user->email,
                         "role_id" => $user->role_id,
                         "phone" => $user->phone,
+                        "profile_img" => $user->profile_img,
                     ];
 
                     // if (!empty($user->employee)) {
@@ -49,7 +50,7 @@ class LoginController extends Controller
 
                     // Bind the authenticated user to Laravel's authentication system
                     auth()->login($user);
-
+            
                     session()->put('logged_session_data', $authenticateUserInfo);
                     return redirect(route('dashboard'));
                 } else {

@@ -2,22 +2,25 @@
 
 namespace App\Services\User;
 
+use App\Http\Requests\User\UserProfileRequest;
 use App\Models\Payment\Account;
 use App\Models\User;
+use App\Traits\FileUploader;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class UserService
 {
-
-    public function storeUserInfo(array $data): User|JsonResponse
+    use FileUploader;
+    public function storeUserInfo(array $data): Model|Collection|Builder|JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -76,7 +79,7 @@ class UserService
 
     public function getUserInfoById(int $userId): Model|Collection|Builder|array|null
     {
-        return User::query()->find($userId);
+        return User::query()->where('id', $userId)->first();
     }
 
     public function updateUserInfo(array $updateData, int $userId): bool
@@ -93,5 +96,28 @@ class UserService
         $data['password'] =  Hash::make($request->password);
 
         return $user->update($data);
+    }
+
+    public function updateUserProfile(UserProfileRequest $request, int $userId): int
+    {
+        try {
+            $data = $request->fields();
+
+            $user = $this->getUserInfoById($userId);
+
+            $data['profile_img'] = $this->updateMedia($request, 'profile_img', 'user/profile', $user['profile_img']);
+
+            if (Auth::user()->id == $userId) {
+                session()->put('logged_session_data.profile_img', $data['profile_img'] ?? $user['profile_img']);
+                session()->put('logged_session_data.full_name', $data['full_name']);
+                session()->put('logged_session_data.email', $data['email']);
+                session()->put('logged_session_data.phone', $data['phone']);
+            }
+            $user->update($data);
+
+            return $userId;
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 }

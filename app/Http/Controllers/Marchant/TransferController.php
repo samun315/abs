@@ -27,9 +27,9 @@ class TransferController extends Controller
         $userId = Auth::user()->id;
 
         $data['emails'] = User::where('role_id', $userRole)
-        ->where('id', '!=', $userId)
-        ->get();
-    
+            ->where('id', '!=', $userId)
+            ->get();
+
         $data['account'] = Account::query()->where('user_id', $userId)->first();
 
         return view('marchant.transfer.index', $data);
@@ -41,12 +41,16 @@ class TransferController extends Controller
 
             $storeUserInfo = $this->transferService->storeTransferBalance($request->fields());
 
-            return sendSuccessResponse(
-                200,
-                'Transfer Balance Created successfully.',
-                'data',
-                $storeUserInfo
-            );
+            if ($storeUserInfo) {
+                return sendSuccessResponse(
+                    200,
+                    'Transfer Balance Created successfully.',
+                    'data',
+                    $storeUserInfo
+                );
+            } else {
+                return sendErrorResponse('Insufficient balance to your account', '', 500);
+            }
         } catch (Exception $exception) {
             return sendErrorResponse('Internal Server Error: ', $exception->getMessage(), $exception->getCode() ?? 500);
         }

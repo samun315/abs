@@ -166,12 +166,13 @@
                         <div class="card shadow-sm">
                             <!-- Cover Image -->
                             <div class="card-body p-0 position-relative">
-                                <img src="<?php echo e(asset('assets/media/background/background8.jpg')); ?>"
+                                <img src="<?php echo e(asset('assets/media/background/background10.jpg')); ?>"
                                     class="w-100 h-250px object-cover" alt="Cover Image">
                                 <div class="position-absolute top-100 start-50 translate-middle">
-                                    <img src="<?php echo e(asset('assets/media/avatars/300-1.jpg')); ?>"
-                                        class="rounded-circle border border-white shadow-lg" width="100" height="100"
-                                        alt="Profile Image">
+                                    <img src="<?php echo e(asset('uploads/user/profile/' . getLoggedInUserInfo('logged_session_data.profile_img'))); ?>"
+                                    class="rounded-circle border border-white shadow-lg"
+                                    width="100" height="100" alt="Profile Image" />
+                                
                                 </div>
                             </div>
 
@@ -184,9 +185,11 @@
 
 
                                 <!-- Stats Section -->
-                                <div class="row mt-10">
+                                <div class="row mt-10 bg-light pt-4">
                                     <div class="col">
-                                        <h4 class="fw-bold">
+                                        <span class="fas fa-object-group fa-2x"></span>
+                                        <p class="text-muted">Orders</p>
+                                        <h4 class="fw-bolder">
                                             <?php if(isset($user_order)): ?>
                                                 <?php echo e($user_order); ?>
 
@@ -194,10 +197,12 @@
                                                 0
                                             <?php endif; ?>
                                         </h4>
-                                        <p class="text-muted">Orders</p>
                                     </div>
                                     <div class="col">
-                                        <h4 class="fw-bold">
+                                        <span class="fas fa-gem fa-2x"></span>
+                                        <p class="text-muted d-none d-md-block">Diamonds Balance</p>
+                                        <p class="text-muted d-md-none">Balance</p>
+                                        <h4 class="fw-bolder">
                                             <?php if(isset($user_diamond->current_balance)): ?>
                                                 <?php echo e($user_diamond?->current_balance); ?>
 
@@ -205,10 +210,11 @@
                                                 0
                                             <?php endif; ?>
                                         </h4>
-                                        <p class="text-muted">Diamonds Balance</p>
                                     </div>
                                     <div class="col">
-                                        <h4 class="fw-bold">
+                                        <span class="fas fa-shopping-bag fa-2x"></span>
+                                        <p class="text-muted">Requests</p>
+                                        <h4 class="fw-bolder">
                                             <?php if(isset($user_request)): ?>
                                                 <?php echo e($user_request); ?>
 
@@ -216,7 +222,6 @@
                                                 0
                                             <?php endif; ?>
                                         </h4>
-                                        <p class="text-muted">Requests</p>
                                     </div>
                                 </div>
                             </div>
@@ -224,21 +229,21 @@
                         </div>
                         <!-- Buttons Section -->
                         <div class="row mt-5 mb-10">
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-4">
                                 <a href="<?php echo e(route('marchant.order.balance.index')); ?>"
                                     class="card text-center bg-success text-white py-8 shadow-lg">
                                     <i class="fas fa-dollar-sign fa-2x text-white"></i>
                                     <h5 class="mt-2">Add Balance</h5>
                                 </a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-4">
                                 <a href="<?php echo e(route('marchant.balance.request.index')); ?>"
                                     class="card text-center bg-info text-white py-8 shadow-lg">
-                                    <i class="fas fa-star fa-2x text-white"></i>
+                                    <i class="fas fa-star-half-alt fa-2x text-white"></i>
                                     <h5 class="mt-2">Send Diamond to Sub Distributor</h5>
                                 </a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-4">
                                 <a href="<?php echo e(route('marchant.transfer.balance.index')); ?>"
                                     class="card text-center bg-primary text-white py-8 shadow-lg">
                                     <i class="fas fa-gem fa-2x text-white"></i>

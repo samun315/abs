@@ -117,6 +117,10 @@ let table = $("#kt_table_balance_request").DataTable({
             searchable: false,
         },
         {
+            data: "mobile_number",
+            name: "mobile_number",
+        },
+        {
             data: "amount",
             name: "amount",
         },
@@ -336,3 +340,13 @@ function updateBalanceRequestStatus(status, id) {
         }
     );
 }
+
+$("#kt_amount").on("keyup",function(){
+    let currentBalance = parseFloat($("#kt_current_balance").val()) || 0;
+
+    let enteredAmount = parseFloat($(this).val()) || 0;
+
+     if (enteredAmount > currentBalance) {
+        toastr.error('You have insufficient balance to your account', "Error!");
+     }
+});

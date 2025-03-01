@@ -62,7 +62,7 @@ class TransferService
             ->make(true);
     }
 
-    public function storeTransferBalance(array $data): Transfer|JsonResponse
+    public function storeTransferBalance(array $data): Transfer|JsonResponse|bool
     {   
         try {
             $data['transfer_from_user'] = $data['created_by'];
@@ -72,8 +72,8 @@ class TransferService
             if ($account && $data['amount'] < $account->current_balance) {
                 return Transfer::create($data);
             }
-        
-            return response()->json(['error' => 'Insufficient balance'], 400);
+
+            return false;
         
         } catch (Exception $exception) {
             report($exception);

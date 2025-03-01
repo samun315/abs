@@ -39,11 +39,17 @@ class BalanceRequestService
     public function storeBalanceRequest(array $data): Model|JsonResponse|bool
     {
         try {
-            $data['transfer_from_user'] = $data['created_by'];
+            // $data['transfer_from_user'] = $data['created_by'];
 
             $account = Account::query()->where('user_id', $data['created_by'])->first();
 
             if ($account && $data['amount'] < $account->current_balance) {
+
+                $from_user['current_balance'] = $account?->current_balance - $data['amount'];
+                $from_user['updated_by'] = loggedInUserId();
+
+                $account->update($from_user);
+
                 return BalanceRequest::query()->create($data);
             }
 

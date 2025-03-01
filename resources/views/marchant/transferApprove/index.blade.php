@@ -52,7 +52,7 @@
                                         <th>Amount</th>
                                         <th>Status</th>
                                         <th>Date</th>
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>

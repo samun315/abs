@@ -66,10 +66,17 @@ class TransferService
     {   
         try {
             $data['transfer_from_user'] = $data['created_by'];
+            $data['status'] = 'Transferred';
 
             $account = Account::query()->where('user_id',$data['transfer_from_user'])->first();
             
             if ($account && $data['amount'] < $account->current_balance) {
+
+                $from_user['current_balance'] = $account?->current_balance - $data['amount'];
+                $from_user['updated_by'] = loggedInUserId();
+
+                $account->update($from_user);
+
                 return Transfer::create($data);
             }
 

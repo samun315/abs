@@ -4,6 +4,8 @@ namespace App\Services\Marchant;
 
 use App\Models\Marchant\BalanceRequest;
 use App\Models\Marchant\RequestWhitelist;
+use App\Models\Payment\Account;
+use Exception;
 use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,12 +21,12 @@ class BalanceRequestService
         $searchKeyword = $request->input('search');
 
         $query = BalanceRequest::query()
-        ->where(function ($query) use ($searchKeyword) {
+            ->where(function ($query) use ($searchKeyword) {
                 $query->where(function ($q) use ($searchKeyword) {
                     $q->where('mobile_number', 'like', "%$searchKeyword%")
                         ->orWhere('status', 'like', "%$searchKeyword%");
                 });
-                $query->where('created_by',loggedInUserId());
+                $query->where('created_by', loggedInUserId());
             })->latest();
 
         // dd( $query);
@@ -34,8 +36,21 @@ class BalanceRequestService
             ->make(true);
     }
 
-    public function storeBalanceRequest(array $data): Model
+    public function storeBalanceRequest(array $data): Model|JsonResponse|bool
     {
-        return BalanceRequest::query()->create($data);
+        try {
+            $data['transfer_from_user'] = $data['created_by'];
+
+            $account = Account::query()->where('user_id', $data['created_by'])->first();
+
+            if ($account && $data['amount'] < $account->current_balance) {
+                return BalanceRequest::query()->create($data);
+            }
+
+            return false;
+        } catch (Exception $exception) {
+            report($exception);
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 }

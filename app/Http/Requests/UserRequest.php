@@ -57,8 +57,8 @@ class UserRequest extends FormRequest
 
         $inputData['full_name'] = $this->input('full_name');
         $inputData['email'] = $this->input('email');
-        $inputData['phone'] = $this->input('phone');
-        $inputData['role_id'] = $this->input('role_id');
+        $inputData['phone'] =  $this->input('phone');
+        $inputData['role_id'] = (int) $this->input('role_id');
         $inputData['user_name'] = $this->input('user_name');
 
         if (empty($this->input('id'))) {
@@ -66,8 +66,8 @@ class UserRequest extends FormRequest
         }
         $inputData['address'] = $this->input('address');
         $inputData['country'] = $this->input('country') ?? null;
-        $inputData['nid'] = $this->input('nid') ?? null;
-        $inputData['diamond_per_usd'] = $this->input('diamond_per_usd');
+        $inputData['nid'] =  (int) $this->input('nid') ?? null;
+        $inputData['diamond_per_usd'] =  (int) $this->input('diamond_per_usd');
         $inputData['active'] = $this->input('active');
 
         if ($this->input('id')) {
@@ -77,7 +77,6 @@ class UserRequest extends FormRequest
             $inputData['created_by'] = loggedInUserId();
             $inputData['created_at'] = createdAtDateConvertToDB();
         }
-
         return $inputData;
     }
 }

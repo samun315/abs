@@ -19,6 +19,7 @@
                     @csrf
 
                     <input type="text" hidden name="id" id="kt_balance_request_id" value="">
+                    <input type="text" hidden name="current_balance" id="kt_current_balance" value="{{$account?->current_balance}}">
 
                     <!--begin::Step 1-->
                     <div class="current" data-kt-stepper-element="content">

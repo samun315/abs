@@ -4,18 +4,18 @@
 <!--begin::Head-->
 
 <head>
-    <title>BracNet-ERP</title>
+    <title>OurAbs</title>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Security-Policy"
         content="script-src 'self' 'nonce-<?php echo e($cspNonce); ?>'; style-src 'self' 'nonce-<?php echo e($cspNonce); ?>' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'self';">
     <meta name="description" content="" />
-    <meta name="keywords" content="bracnet, bracnet, bootstrap 5, crm, CRM" />
+    <meta name="keywords" content="OurAbs, OurAbs, IMO Diamond, IMO Diamond Bangladesh" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="BracNet ERP" />
-    <meta property="og:url" content="https://keenthemes.com/metronic" />
-    <meta property="og:site_name" content="BracNet ERP" />
+    <meta property="og:title" content="OurAbs" />
+
+    <meta property="og:site_name" content="OurAbs" />
 
     <link rel="shortcut icon" href="<?php echo e(asset('assets/media/logos/favicon.svg')); ?>" type="image/svg+xml" />
 

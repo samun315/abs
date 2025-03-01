@@ -29,7 +29,7 @@ class BalanceRequestApproveController extends Controller
 
         try {
             // Update the status of the currency
-            $whitelist = $this->balanceRequestApproveService->updateBalanceRequestStatus(['status' => $status], $id);
+            $whitelist = $this->balanceRequestApproveService->updateBalanceRequestStatus($request, $id);
 
             return sendSuccessResponse(200, 'Balance Request status updated successfully.');
         } catch (Exception $e) {

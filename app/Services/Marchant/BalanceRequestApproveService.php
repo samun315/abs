@@ -3,11 +3,14 @@
 namespace App\Services\Marchant;
 
 use App\Models\Marchant\BalanceRequest;
+use App\Models\Payment\Account;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class BalanceRequestApproveService
@@ -59,14 +62,44 @@ class BalanceRequestApproveService
             ->make(true);
     }
 
-    public function updateBalanceRequestStatus(array $updateData, int $id): Model
+    public function updateBalanceRequestStatus(Request $request, int $id): Model|Builder|bool
     {
-        // Find the whitelist by its ID or fail if not found.
-        $balance = BalanceRequest::query()->where('id', $id)->first();
+        DB::beginTransaction();
+        try {
 
-        // Update the whitelist with the provided data.
-        $balance->update($updateData);
+            // Find the whitelist by its ID or fail if not found.
+            $balance = BalanceRequest::query()->where('id', $id)->first();
 
-        return $balance;
+            if (!empty($balance)) {
+                $givenAmount = $balance->amount;
+                $fromUser = $balance->created_by;
+
+                $requestStatus = [
+                    'status' => $request->input('status'),
+                    'updated_by' => loggedInUserId(),
+                ];
+
+                if ($request->input('status') == 'Transferred') {
+                    $fromUserAccount = Account::query()->where('user_id', $fromUser)->first();
+
+                    if (!empty($fromUserAccount)) {
+                        $from_user['current_balance'] = $fromUserAccount?->current_balance - $givenAmount;
+                        $from_user['updated_by'] = loggedInUserId();
+
+                        $fromUserAccount->update($from_user);
+                    }
+                }
+
+                // Update the whitelist with the provided data.
+                $balance->update($requestStatus);
+            }
+
+            DB::commit();
+
+            return $balance;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
     }
 }

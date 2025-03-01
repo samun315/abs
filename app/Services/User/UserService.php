@@ -26,15 +26,17 @@ class UserService
         try {
 
             $data['password'] =  Hash::make($data['password']);
+
             $user = User::query()->create($data);
-            $userId = $user->id;
+
+            $userId = (int) $user->id;
 
             $accountData = [
                 'user_id' => $userId,
                 'created_by' => $data['created_by'],
             ];
 
-            Account::query()->create($accountData);
+            $Account = Account::query()->create($accountData);
 
             DB::commit();
 

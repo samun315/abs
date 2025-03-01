@@ -8,8 +8,8 @@
         </div>
         <!--end::Copyright-->
         <!--begin::Menu-->
-        {{-- <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
-            <li class="menu-item">
+        <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
+            {{-- <li class="menu-item">
                 <a href="javascript:void(0)" target="_blank" class="menu-link px-2">About</a>
             </li>
             <li class="menu-item">
@@ -17,8 +17,8 @@
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0)" target="_blank" class="menu-link px-2">Purchase</a>
-            </li>
-        </ul> --}}
+            </li> --}}
+        </ul>
         <!--end::Menu-->
     </div>
     <!--end::Container-->

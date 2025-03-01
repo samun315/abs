@@ -8,7 +8,9 @@
         </div>
         <!--end::Copyright-->
         <!--begin::Menu-->
-        
+        <ul class="menu menu-gray-600 menu-hover-primary fw-bold order-1">
+            
+        </ul>
         <!--end::Menu-->
     </div>
     <!--end::Container-->

@@ -152,10 +152,15 @@
                                 <img src="{{ asset('assets/media/background/background10.jpg') }}"
                                     class="w-100 h-250px object-cover" alt="Cover Image">
                                 <div class="position-absolute top-100 start-50 translate-middle">
-                                    <img src="{{ asset('uploads/user/profile/' . getLoggedInUserInfo('logged_session_data.profile_img')) }}"
-                                    class="rounded-circle border border-white shadow-lg"
-                                    width="100" height="100" alt="Profile Image" />
-                                
+                                    @if (!empty(getLoggedInUserInfo('logged_session_data.profile_img')))
+                                        <img src="{{ asset('uploads/user/profile/' . getLoggedInUserInfo('logged_session_data.profile_img')) }}"
+                                            class="rounded-circle border border-white shadow-lg" width="100"
+                                            height="100" alt="Profile Image" />
+                                    @else
+                                        <img src="{{ asset('assets/media/avatars/300-1.jpg') }}"
+                                            class="rounded-circle border border-white shadow-lg" width="100"
+                                            height="100" alt="Profile Image" />
+                                    @endif
                                 </div>
                             </div>
 

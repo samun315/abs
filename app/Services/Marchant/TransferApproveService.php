@@ -52,26 +52,26 @@ class TransferApproveService
                 $to_user = $to_name . '<br>' . $to_phone . '<br>' . $to_email;
                 return $to_user;
             })
-            ->addColumn('action', function ($row) {
+            // ->addColumn('action', function ($row) {
 
-                $transferBtn = '';
-                $cancelBtn = '';
+            //     $transferBtn = '';
+            //     $cancelBtn = '';
 
-                if ($row->status == 'Transferred' || $row->status == 'Cancelled') {
-                    $transferBtn = '';
-                    $cancelBtn = '';
-                } else {
-                    $transferBtn = '<button type="button" data-id="' . $row->id . '"  data-status="Transferred" class="btn btn-success btn-sm ms-lg-2 transferredBtn">Transfer</button>';
-                    $cancelBtn = '<button type="button" data-id="' . $row->id . '" data-status="Cancelled" class="btn btn-danger btn-sm ms-lg-2 cancelledBtn">Cancel</button>';
-                }
+            //     if ($row->status == 'Transferred' || $row->status == 'Cancelled') {
+            //         $transferBtn = '';
+            //         $cancelBtn = '';
+            //     } else {
+            //         $transferBtn = '<button type="button" data-id="' . $row->id . '"  data-status="Transferred" class="btn btn-success btn-sm ms-lg-2 transferredBtn">Transfer</button>';
+            //         $cancelBtn = '<button type="button" data-id="' . $row->id . '" data-status="Cancelled" class="btn btn-danger btn-sm ms-lg-2 cancelledBtn">Cancel</button>';
+            //     }
 
-                $button = '<div class="btn-group" role="group" aria-label="Basic example">
-                ' . $transferBtn . '
-                ' . $cancelBtn . '
-                </div>';
-                return $button;
-            })
-            ->rawColumns(['action', 'from_user', 'to_user'])
+            //     $button = '<div class="btn-group" role="group" aria-label="Basic example">
+            //     ' . $transferBtn . '
+            //     ' . $cancelBtn . '
+            //     </div>';
+            //     return $button;
+            // })
+            ->rawColumns(['from_user', 'to_user'])
             ->make(true);
     }
 

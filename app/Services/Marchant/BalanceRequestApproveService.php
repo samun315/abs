@@ -46,9 +46,11 @@ class BalanceRequestApproveService
                 $transferBtn = '';
                 $cancelBtn = '';
 
-                if ($row->status != 'Transferred') {
-                    $transferBtn = '<button type="button" data-id="' . $row->id . '" data-status="Transferred" class="btn btn-warning btn-sm ms-lg-2 transferredBtn">Transfer</button>';
+                if ($row->status == 'Transferred' || $row->status == 'Cancelled') {
+                    $transferBtn = '';
+                    $cancelBtn = '';
                 } else {
+                    $transferBtn = '<button type="button" data-id="' . $row->id . '" data-status="Transferred" class="btn btn-success btn-sm ms-lg-2 transferredBtn">Paid</button>';
                     $cancelBtn = '<button type="button" data-id="' . $row->id . '" data-status="Cancelled" class="btn btn-danger btn-sm ms-lg-2 cancelledBtn">Cancel</button>';
                 }
 
@@ -80,18 +82,20 @@ class BalanceRequestApproveService
                 ];
 
                 if ($request->input('status') == 'Transferred') {
+
+                    // Update the whitelist with the provided data.
+                    $balance->update($requestStatus);
+                } else {
                     $fromUserAccount = Account::query()->where('user_id', $fromUser)->first();
 
                     if (!empty($fromUserAccount)) {
-                        $from_user['current_balance'] = $fromUserAccount?->current_balance - $givenAmount;
+                        $from_user['current_balance'] = $fromUserAccount?->current_balance + $givenAmount;
                         $from_user['updated_by'] = loggedInUserId();
 
                         $fromUserAccount->update($from_user);
                     }
+                    $balance->update($requestStatus);
                 }
-
-                // Update the whitelist with the provided data.
-                $balance->update($requestStatus);
             }
 
             DB::commit();

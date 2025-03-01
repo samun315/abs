@@ -248,10 +248,6 @@ let approveTable = $("#kt_table_approve_transfer_balance").DataTable({
             data: "created_at",
             render: formatDate,
         },
-        {
-            data:'action',
-            name:'action'
-        }
     ],
     columnDefs: [
         {

@@ -1,5 +1,5 @@
 <base href="../../">
-<title><?php echo $__env->yieldContent('title'); ?> | ABS </title>
+<title><?php echo $__env->yieldContent('title'); ?> | OurAbs </title>
 
 <meta charset="utf-8" />
 <meta http-equiv="Content-Security-Policy"
@@ -15,14 +15,13 @@
 
 <meta name="description"
     content="The most advanced ERP System beginners and professionals. Multi-demo, Laravel versions. Grab your copy now and get life-time updates for free." />
-<meta name="keywords" content="ERP,HRM, hrm, Hrm, sales, crm, ticketing" />
+<meta name="keywords" content="ABS,OurABs, IMO, IMO Diamond" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:type" content="article" />
 <meta property="og:title"
-    content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
-<meta property="og:url" content="https://erp.bracnet.net" />
-<meta property="og:site_name" content="Keenthemes | Metronic" />
+    content="ABS-Dashboard" />
+<meta property="og:url" content="ourabs.com" />
 
 <!--begin::CSRF Token-->
 <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">

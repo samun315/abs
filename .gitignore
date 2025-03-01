@@ -25,3 +25,4 @@ Homestead.json
 .idea
 /.idea
 
+storage/logs/laravel.log
